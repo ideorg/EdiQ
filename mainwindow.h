@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPlainTextEdit>
+#include "CodeEditor.h"
 
 class MainWindow : public QMainWindow
 {
@@ -13,7 +13,7 @@ public:
     ~MainWindow();
 private:
     void createMenus();
-    QPlainTextEdit editor;
+    CodeEditor editor;
     void openFile();
 };
 #endif // MAINWINDOW_H

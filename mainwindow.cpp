@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include <QMenuBar>
 #include <QFileDialog>
-#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -26,12 +25,6 @@ void MainWindow::openFile()
     QFileDialog dialog(this, tr("Open File"));
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
-        QString fileName = dialog.selectedFiles().first();
-        QFile f(fileName);
-        if (!f.open(QFile::ReadOnly)) {
-            qWarning() << "Failed to open" << fileName << ":" << f.errorString();
-            return;
-        }
-        editor.setPlainText(QString::fromUtf8(f.readAll()));
+        editor.openFile(dialog.selectedFiles().first());
     }
 }
