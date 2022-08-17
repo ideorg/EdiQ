@@ -8,10 +8,11 @@
 
 #include <QString>
 #include <QPlainTextEdit>
+#include "IEditor.h"
 
-class CodeEditor : public QPlainTextEdit {
+class CodeEditor : public QPlainTextEdit,IEditor {
 public:
-    void openFile(const QString &fileName);
+    void openFile(const QString &fileName) override;
 };
 
 

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "CodeEditor.h"
+#include "IEditorFactory.h"
 
 class MainWindow : public QMainWindow
 {
@@ -12,8 +13,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 private:
+    IEditorFactory *editorFactory;
     void createMenus();
-    CodeEditor editor;
+    QTabWidget tabWidget;
     void openFile();
 };
 #endif // MAINWINDOW_H

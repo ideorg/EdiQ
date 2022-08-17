@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     createMenus();
-    setCentralWidget(&editor);
+    setCentralWidget(&tabWidget);
 }
 
 MainWindow::~MainWindow()
@@ -25,6 +25,7 @@ void MainWindow::openFile()
     QFileDialog dialog(this, tr("Open File"));
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
-        editor.openFile(dialog.selectedFiles().first());
+        //@todo: raise error because now editorFactory is NULL and not checks if getCurrentEditor() is not NULL
+        editorFactory->getCurrentEditor()->openFile(dialog.selectedFiles().first());
     }
 }
