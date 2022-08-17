@@ -11,6 +11,7 @@
 class IEditor {
 public:
     virtual void openFile(const QString &fileName) = 0;
+    virtual void save() = 0;
 };
 
 

@@ -11,8 +11,10 @@
 #include "IEditor.h"
 
 class CodeEditor : public QPlainTextEdit, public IEditor {
+    QString path;
 public:
     void openFile(const QString &fileName) override;
+    void save() override;
 };
 
 

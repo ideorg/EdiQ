@@ -17,5 +17,6 @@ private:
     void createMenus();
     QTabWidget tabWidget;
     void openFile();
+    void saveFile();
 };
 #endif // MAINWINDOW_H

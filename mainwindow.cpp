@@ -18,9 +18,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::createMenus() {
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
+
     QAction *openAct = new QAction(tr("&Open..."), this);
     fileMenu->addAction(openAct);
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
+
+    QAction *saveAct = new QAction(tr("&Save"), this);
+    fileMenu->addAction(saveAct);
+    connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
 }
 
 void MainWindow::openFile()
@@ -32,4 +37,10 @@ void MainWindow::openFile()
         IEditor *newEditor = editorFactory->createTab(fileInfo.fileName()); //only name part without directory
         newEditor->openFile(dialog.selectedFiles().first());
     }
+}
+
+void MainWindow::saveFile() {
+    IEditor *editor = editorFactory->getCurrentEditor();
+    if (!editor) return;
+    editor->save();
 }
