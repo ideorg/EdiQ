@@ -15,6 +15,7 @@ class CodeEditor : public QPlainTextEdit, public IEditor {
 public:
     void openFile(const QString &fileName) override;
     void save() override;
+    void saveAs(const QString &fileName) override;
 };
 
 

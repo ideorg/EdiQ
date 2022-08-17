@@ -18,5 +18,6 @@ private:
     QTabWidget tabWidget;
     void openFile();
     void saveFile();
+    void saveAsFile();
 };
 #endif // MAINWINDOW_H

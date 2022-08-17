@@ -26,3 +26,8 @@ void CodeEditor::save() {
     }
     f.write(text.toUtf8());
 }
+
+void CodeEditor::saveAs(const QString &fileName) {
+    path = fileName;
+    save();
+}

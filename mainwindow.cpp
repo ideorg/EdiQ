@@ -26,6 +26,10 @@ void MainWindow::createMenus() {
     QAction *saveAct = new QAction(tr("&Save"), this);
     fileMenu->addAction(saveAct);
     connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
+
+    QAction *saveAsAct = new QAction(tr("save&As..."), this);
+    fileMenu->addAction(saveAsAct);
+    connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAsFile);
 }
 
 void MainWindow::openFile()
@@ -43,4 +47,15 @@ void MainWindow::saveFile() {
     IEditor *editor = editorFactory->getCurrentEditor();
     if (!editor) return;
     editor->save();
+}
+
+void MainWindow::saveAsFile() {
+    IEditor *editor = editorFactory->getCurrentEditor();
+    if (!editor) return;
+    QFileDialog dialog(this, tr("Save File"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setOption(QFileDialog::DontUseNativeDialog);
+    if (dialog.exec() == QDialog::Accepted) {
+        editor->saveAs(dialog.selectedFiles().first());
+    }
 }
