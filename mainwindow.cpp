@@ -3,6 +3,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    setCentralWidget(&editor);
 }
 
 MainWindow::~MainWindow()
