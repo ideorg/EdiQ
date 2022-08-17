@@ -16,10 +16,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow.cpp
-        mainwindow.h
+        mainwindow.cpp mainwindow.h
         CodeEditor.cpp CodeEditor.h
-        IEditorFactory.h IEditor.h)
+        IEditorFactory.h IEditor.h
+        EditorFactory.cpp EditorFactory.h)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(EdiQ

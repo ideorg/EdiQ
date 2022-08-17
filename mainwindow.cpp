@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "EditorFactory.h"
 #include <QMenuBar>
 #include <QFileDialog>
 
@@ -7,10 +8,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     createMenus();
     setCentralWidget(&tabWidget);
+    editorFactory = new EditorFactory(&tabWidget);
 }
 
 MainWindow::~MainWindow()
 {
+    delete editorFactory;
 }
 
 void MainWindow::createMenus() {
@@ -25,7 +28,8 @@ void MainWindow::openFile()
     QFileDialog dialog(this, tr("Open File"));
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
-        //@todo: raise error because now editorFactory is NULL and not checks if getCurrentEditor() is not NULL
-        editorFactory->getCurrentEditor()->openFile(dialog.selectedFiles().first());
+        QFileInfo fileInfo(dialog.selectedFiles().first());
+        IEditor *newEditor = editorFactory->createTab(fileInfo.fileName()); //only name part without directory
+        newEditor->openFile(dialog.selectedFiles().first());
     }
 }

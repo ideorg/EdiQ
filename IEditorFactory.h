@@ -10,7 +10,7 @@
 
 class IEditorFactory {
 public:
-    virtual IEditor *createTabSheet() = 0;
+    virtual IEditor *createTab(const QString& title) = 0;
     virtual int getEditorCount() = 0;
     virtual IEditor *getEditor(int index) = 0;
     virtual IEditor *getCurrentEditor() = 0;

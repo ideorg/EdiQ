@@ -10,7 +10,7 @@
 #include <QPlainTextEdit>
 #include "IEditor.h"
 
-class CodeEditor : public QPlainTextEdit,IEditor {
+class CodeEditor : public QPlainTextEdit, public IEditor {
 public:
     void openFile(const QString &fileName) override;
 };
