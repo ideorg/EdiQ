@@ -12,6 +12,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 private:
+    void createMenus();
     QPlainTextEdit editor;
+    void openFile();
 };
 #endif // MAINWINDOW_H
