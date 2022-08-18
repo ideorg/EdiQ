@@ -21,6 +21,8 @@ public:
     IEditor *getCurrentEditor() override;
     bool tryCloseEditor(int index) override;
     bool tryCloseCurrentEditor() override;
+private:
+    void closeEditor(int index);
 };
 
 

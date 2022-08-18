@@ -25,13 +25,19 @@ IEditor *EditorFactory::getCurrentEditor() {
     return dynamic_cast<CodeEditor *>(tabWidget->currentWidget());
 }
 
-bool EditorFactory::tryCloseEditor(int index) {
-    if (index<0 || index>=tabWidget->count())
-        throw EdiException("tryCloseEditor: bad index");
+void EditorFactory::closeEditor(int index) {
     auto* editor = dynamic_cast<CodeEditor *>(tabWidget->widget(index));
     tabWidget->removeTab(index);
     untitledCounter.releaseId(editor->untitledId);
     delete editor;
+}
+
+bool EditorFactory::tryCloseEditor(int index) {
+    if (index==-1 && tabWidget->count()==0)
+        return true; //true because stay no tab
+    if (index<0 || index>=tabWidget->count())
+        throw EdiException("tryCloseEditor: bad index");
+    closeEditor(index);
     return true;
 }
 
