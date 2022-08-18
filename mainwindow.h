@@ -20,5 +20,6 @@ private:
     void saveFile();
     void saveAsFile();
     void closeFile();
+    void closeAllFile();
 };
 #endif // MAINWINDOW_H

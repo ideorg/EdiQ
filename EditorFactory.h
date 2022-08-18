@@ -21,9 +21,9 @@ public:
     IEditor *getCurrentEditor() override;
     bool tryCloseEditor(int index, IEditor::CloseEnum &canClose) override;
     bool tryCloseCurrentEditor() override;
+    bool tryCloseAll() override;
 private:
     void closeEditor(int index);
-    void askBeforeClosing(int index, IEditor::CloseEnum &canClose);
 };
 
 

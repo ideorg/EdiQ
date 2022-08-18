@@ -38,6 +38,10 @@ void MainWindow::createMenus() {
     QAction *closeAct = new QAction(tr("&Close"), this);
     fileMenu->addAction(closeAct);
     connect(closeAct, &QAction::triggered, this, &MainWindow::closeFile);
+
+    QAction *closeAllAct = new QAction(tr("Clos&e all"), this);
+    fileMenu->addAction(closeAllAct);
+    connect(closeAllAct, &QAction::triggered, this, &MainWindow::closeAllFile);
 }
 
 void MainWindow::newFile() {
@@ -68,4 +72,8 @@ void MainWindow::saveAsFile() {
 
 void MainWindow::closeFile() {
     editorFactory->tryCloseCurrentEditor();
+}
+
+void MainWindow::closeAllFile() {
+    editorFactory->tryCloseAll();
 }

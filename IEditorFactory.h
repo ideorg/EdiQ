@@ -16,6 +16,7 @@ public:
     virtual IEditor *getCurrentEditor() = 0;
     virtual bool tryCloseEditor(int index, IEditor::CloseEnum &canClose) = 0;
     virtual bool tryCloseCurrentEditor() = 0;
+    virtual bool tryCloseAll() = 0;
 };
 
 

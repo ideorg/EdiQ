@@ -57,3 +57,10 @@ bool EditorFactory::tryCloseCurrentEditor() {
     IEditor::CloseEnum canClose = IEditor::clClose;
     return tryCloseEditor(tabWidget->currentIndex(), canClose);
 }
+
+bool EditorFactory::tryCloseAll() {
+    IEditor::CloseEnum canClose = IEditor::clClose;
+    for (int i=tabWidget->count()-1; i>=0; i--)
+        if (!tryCloseEditor(tabWidget->currentIndex(), canClose)) return false;
+    return true;
+}
