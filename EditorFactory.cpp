@@ -5,7 +5,7 @@
 #include "EditorFactory.h"
 #include "CodeEditor.h"
 
-IEditor *EditorFactory::createTab(const QString& title) {
+IEditor *EditorFactory::createEditorTab(const QString& title) {
     CodeEditor *editor = new CodeEditor();
     tabWidget->addTab(editor, title);
     return editor;

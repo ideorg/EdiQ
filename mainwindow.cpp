@@ -38,7 +38,7 @@ void MainWindow::createMenus() {
 
 void MainWindow::newFile() {
     untitledCounter.getNextId();
-    IEditor *newEditor = editorFactory->createTab("Untitled");
+    IEditor *newEditor = editorFactory->createEditorTab("Untitled");
 }
 
 void MainWindow::openFile()
@@ -47,7 +47,7 @@ void MainWindow::openFile()
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
         QFileInfo fileInfo(dialog.selectedFiles().first());
-        IEditor *newEditor = editorFactory->createTab(fileInfo.fileName()); //only name part without directory
+        IEditor *newEditor = editorFactory->createEditorTab(fileInfo.fileName()); //only name part without directory
         newEditor->openFile(dialog.selectedFiles().first());
     }
 }
