@@ -13,7 +13,9 @@
 
 class CodeEditor : public QPlainTextEdit, public IEditor {
     QString path;
+    int untitledId = 0;
 public:
+    friend class EditorFactory;
     explicit CodeEditor(QString path): path(std::move(path)) {}
     QString getTitle() override;
     void openFile() override;

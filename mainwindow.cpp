@@ -37,8 +37,8 @@ void MainWindow::createMenus() {
 }
 
 void MainWindow::newFile() {
-    untitledCounter.getNextId();
-    IEditor *newEditor = editorFactory->createEditorTab("Untitled");
+    int id = untitledCounter.getNextId();
+    IEditor *newEditor = editorFactory->createEditorTab(id);
 }
 
 void MainWindow::openFile()

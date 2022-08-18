@@ -33,6 +33,10 @@ void CodeEditor::saveAs(const QString &fileName) {
 }
 
 QString CodeEditor::getTitle() {
-    QFileInfo fileInfo(path);
-    return fileInfo.fileName();
+    if (path.isEmpty())
+        return "Untitled" + QString::number(untitledId);
+    else {
+        QFileInfo fileInfo(path);
+        return fileInfo.fileName();
+    }
 }

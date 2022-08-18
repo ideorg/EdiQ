@@ -6,13 +6,16 @@
 #include "CodeEditor.h"
 
 IEditor *EditorFactory::createEditorTab(const QString& path) {
-    CodeEditor *editor = new CodeEditor(path);
+    auto *editor = new CodeEditor(path);
     tabWidget->addTab(editor, editor->getTitle());
     return editor;
 }
 
 IEditor *EditorFactory::createEditorTab(int untitledId) {
-    return nullptr;
+    auto *editor = new CodeEditor("");
+    editor->untitledId = untitledId;
+    tabWidget->addTab(editor, editor->getTitle());
+    return editor;
 }
 
 int EditorFactory::getEditorCount() {
