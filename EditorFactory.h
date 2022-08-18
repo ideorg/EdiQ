@@ -19,11 +19,11 @@ public:
     int getEditorCount() override;
     IEditor *getEditor(int index) override;
     IEditor *getCurrentEditor() override;
-    bool tryCloseEditor(int index) override;
+    bool tryCloseEditor(int index, IEditor::CloseEnum &canClose) override;
     bool tryCloseCurrentEditor() override;
 private:
     void closeEditor(int index);
-    bool askBeforeClosing(int index);
+    void askBeforeClosing(int index, IEditor::CloseEnum &canClose);
 };
 
 

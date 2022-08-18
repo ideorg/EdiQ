@@ -32,25 +32,28 @@ void EditorFactory::closeEditor(int index) {
     delete editor;
 }
 
-bool EditorFactory::askBeforeClosing(int index) {
-    if (getEditor(index)->isModified())
-        QMessageBox::warning(nullptr, "info", "isModified");
-    return true;
-}
-
-bool EditorFactory::tryCloseEditor(int index) {
+bool EditorFactory::tryCloseEditor(int index, IEditor::CloseEnum &canClose) {
     if (index==-1 && tabWidget->count()==0)
         return true; //true because stay no tab
     if (index<0 || index>=tabWidget->count())
         throw EdiException("tryCloseEditor: bad index");
-    bool ret;
-    ret = askBeforeClosing(index);
-    if (ret)
+
+    IEditor::ConsiderEnum consider = getEditor(index)->consider();
+    if (consider==IEditor::coCanClose) {
         closeEditor(index);
-    return ret;
+        return true;
+    }
+    else {
+        getEditor(index)->askSaveChangesBeforeClosing(canClose);
+        if (canClose==IEditor::clClose || canClose==IEditor::clCloseAllSave || canClose==IEditor::clCloseAllDiscard) {
+            closeEditor(index);
+            return true;
+        }
+    }
+    return false;
 }
 
 bool EditorFactory::tryCloseCurrentEditor() {
-    return tryCloseEditor(tabWidget->currentIndex());
+    IEditor::CloseEnum canClose = IEditor::clClose;
+    return tryCloseEditor(tabWidget->currentIndex(), canClose);
 }
-

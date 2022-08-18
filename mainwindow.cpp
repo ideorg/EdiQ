@@ -63,12 +63,7 @@ void MainWindow::saveFile() {
 void MainWindow::saveAsFile() {
     IEditor *editor = editorFactory->getCurrentEditor();
     if (!editor) return;
-    QFileDialog dialog(this, tr("Save File"));
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setOption(QFileDialog::DontUseNativeDialog);
-    if (dialog.exec() == QDialog::Accepted) {
-        editor->saveAs(dialog.selectedFiles().first());
-    }
+    editor->saveAs();
 }
 
 void MainWindow::closeFile() {

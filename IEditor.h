@@ -10,12 +10,17 @@
 
 class IEditor {
 public:
+    enum ConsiderEnum {coCanClose, coCanSave, coSaveAs};
+    enum CloseEnum {clClose, clCloseAllSave, clCloseAllDiscard, clNo, clCancel, clError};
     virtual QString getTitle() = 0;
     virtual bool isModified() = 0;
+    virtual bool isEmpty() = 0;
     virtual void openFile() = 0;
     //virtual void openFile(const QString &fileName) = 0;
-    virtual void save() = 0;
-    virtual void saveAs(const QString &fileName) = 0;
+    virtual bool save() = 0;
+    virtual bool saveAs() = 0;
+    virtual ConsiderEnum consider() = 0;
+    virtual void askSaveChangesBeforeClosing(CloseEnum &canClose) = 0;
 };
 
 

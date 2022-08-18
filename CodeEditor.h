@@ -10,18 +10,24 @@
 #include <QPlainTextEdit>
 #include <utility>
 #include "IEditor.h"
+#include "QMessageBox"
 
 class CodeEditor : public QPlainTextEdit, public IEditor {
     QString path;
     int untitledId = 0;
+    bool saveFile();
 public:
     friend class EditorFactory;
     explicit CodeEditor(QString path): path(std::move(path)) {}
+    ~CodeEditor() {QMessageBox::warning(this, "info", "delete "+getTitle());}
     QString getTitle() override;
     bool isModified() override;
+    bool isEmpty() override;
     void openFile() override;
-    void save() override;
-    void saveAs(const QString &fileName) override;
+    bool save() override;
+    bool saveAs() override;
+    ConsiderEnum consider() override;
+    void askSaveChangesBeforeClosing(CloseEnum &canClose) override;
 };
 
 
