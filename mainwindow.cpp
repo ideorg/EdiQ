@@ -34,11 +34,14 @@ void MainWindow::createMenus() {
     QAction *saveAsAct = new QAction(tr("save&As..."), this);
     fileMenu->addAction(saveAsAct);
     connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAsFile);
+
+    QAction *closeAct = new QAction(tr("&Close"), this);
+    fileMenu->addAction(closeAct);
+    connect(closeAct, &QAction::triggered, this, &MainWindow::closeFile);
 }
 
 void MainWindow::newFile() {
-    int id = untitledCounter.getNextId();
-    IEditor *newEditor = editorFactory->createEditorTab(id);
+    IEditor *newEditor = editorFactory->createEditorTab("");
 }
 
 void MainWindow::openFile()
@@ -66,4 +69,8 @@ void MainWindow::saveAsFile() {
     if (dialog.exec() == QDialog::Accepted) {
         editor->saveAs(dialog.selectedFiles().first());
     }
+}
+
+void MainWindow::closeFile() {
+    editorFactory->tryCloseCurrentEditor();
 }

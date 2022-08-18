@@ -2,9 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "CodeEditor.h"
 #include "IEditorFactory.h"
-#include "UntitledCounter.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,12 +13,12 @@ public:
     ~MainWindow();
 private:
     IEditorFactory *editorFactory;
-    UntitledCounter untitledCounter;
     void createMenus();
     QTabWidget tabWidget;
     void newFile();
     void openFile();
     void saveFile();
     void saveAsFile();
+    void closeFile();
 };
 #endif // MAINWINDOW_H
