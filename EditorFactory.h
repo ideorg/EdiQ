@@ -8,16 +8,19 @@
 
 #include <QTabWidget>
 #include "IEditorFactory.h"
+#include "UntitledCounter.h"
 
 class EditorFactory : public IEditorFactory {
     QTabWidget *tabWidget;
+    UntitledCounter untitledCounter;
 public:
     explicit EditorFactory(QTabWidget *tabWidget):tabWidget(tabWidget){};
     IEditor *createEditorTab(const QString& path) override;
-    IEditor *createEditorTab(int untitledId) override;
     int getEditorCount() override;
     IEditor *getEditor(int index) override;
     IEditor *getCurrentEditor() override;
+    bool tryCloseEditor(int index) override;
+    bool tryCloseCurrentEditor() override;
 };
 
 
