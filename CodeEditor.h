@@ -18,6 +18,7 @@ public:
     friend class EditorFactory;
     explicit CodeEditor(QString path): path(std::move(path)) {}
     QString getTitle() override;
+    bool isModified() override;
     void openFile() override;
     void save() override;
     void saveAs(const QString &fileName) override;

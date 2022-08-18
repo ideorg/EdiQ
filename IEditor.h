@@ -11,6 +11,7 @@
 class IEditor {
 public:
     virtual QString getTitle() = 0;
+    virtual bool isModified() = 0;
     virtual void openFile() = 0;
     //virtual void openFile(const QString &fileName) = 0;
     virtual void save() = 0;

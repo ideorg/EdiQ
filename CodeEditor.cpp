@@ -40,3 +40,7 @@ QString CodeEditor::getTitle() {
         return fileInfo.fileName();
     }
 }
+
+bool CodeEditor::isModified() {
+    return document()->isModified();
+}

@@ -23,6 +23,7 @@ public:
     bool tryCloseCurrentEditor() override;
 private:
     void closeEditor(int index);
+    bool askBeforeClosing(int index);
 };
 
 
