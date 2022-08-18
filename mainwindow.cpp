@@ -19,6 +19,10 @@ MainWindow::~MainWindow()
 void MainWindow::createMenus() {
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 
+    QAction *newAct = new QAction(tr("&New"), this);
+    fileMenu->addAction(newAct);
+    connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
+
     QAction *openAct = new QAction(tr("&Open..."), this);
     fileMenu->addAction(openAct);
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
@@ -30,6 +34,11 @@ void MainWindow::createMenus() {
     QAction *saveAsAct = new QAction(tr("save&As..."), this);
     fileMenu->addAction(saveAsAct);
     connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAsFile);
+}
+
+void MainWindow::newFile() {
+    untitledCounter.getNextId();
+    IEditor *newEditor = editorFactory->createTab("Untitled");
 }
 
 void MainWindow::openFile()
