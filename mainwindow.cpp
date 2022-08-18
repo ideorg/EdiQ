@@ -2,6 +2,7 @@
 #include "EditorFactory.h"
 #include <QMenuBar>
 #include <QFileDialog>
+#include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -31,7 +32,7 @@ void MainWindow::createMenus() {
     fileMenu->addAction(saveAct);
     connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
 
-    QAction *saveAsAct = new QAction(tr("save&As..."), this);
+    QAction *saveAsAct = new QAction(tr("save &As..."), this);
     fileMenu->addAction(saveAsAct);
     connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAsFile);
 
@@ -39,7 +40,7 @@ void MainWindow::createMenus() {
     fileMenu->addAction(closeAct);
     connect(closeAct, &QAction::triggered, this, &MainWindow::closeFile);
 
-    QAction *closeAllAct = new QAction(tr("Clos&e all"), this);
+    QAction *closeAllAct = new QAction(tr("clos&E all"), this);
     fileMenu->addAction(closeAllAct);
     connect(closeAllAct, &QAction::triggered, this, &MainWindow::closeAllFile);
 }
@@ -76,4 +77,11 @@ void MainWindow::closeFile() {
 
 void MainWindow::closeAllFile() {
     editorFactory->tryCloseAll();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    if (editorFactory->tryCloseAll())
+        event->accept();
+    else
+        event->ignore();
 }
