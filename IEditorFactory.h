@@ -10,7 +10,8 @@
 
 class IEditorFactory {
 public:
-    virtual IEditor *createEditorTab(const QString& title) = 0;
+    virtual IEditor *createEditorTab(const QString& path) = 0;
+    virtual IEditor *createEditorTab(int untitledId) = 0;
     virtual int getEditorCount() = 0;
     virtual IEditor *getEditor(int index) = 0;
     virtual IEditor *getCurrentEditor() = 0;

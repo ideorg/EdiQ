@@ -46,9 +46,8 @@ void MainWindow::openFile()
     QFileDialog dialog(this, tr("Open File"));
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
-        QFileInfo fileInfo(dialog.selectedFiles().first());
-        IEditor *newEditor = editorFactory->createEditorTab(fileInfo.fileName()); //only name part without directory
-        newEditor->openFile(dialog.selectedFiles().first());
+        IEditor *newEditor = editorFactory->createEditorTab(dialog.selectedFiles().first());
+        newEditor->openFile();
     }
 }
 

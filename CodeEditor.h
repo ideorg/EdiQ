@@ -8,12 +8,15 @@
 
 #include <QString>
 #include <QPlainTextEdit>
+#include <utility>
 #include "IEditor.h"
 
 class CodeEditor : public QPlainTextEdit, public IEditor {
     QString path;
 public:
-    void openFile(const QString &fileName) override;
+    explicit CodeEditor(QString path): path(std::move(path)) {}
+    QString getTitle() override;
+    void openFile() override;
     void save() override;
     void saveAs(const QString &fileName) override;
 };

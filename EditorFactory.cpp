@@ -5,10 +5,14 @@
 #include "EditorFactory.h"
 #include "CodeEditor.h"
 
-IEditor *EditorFactory::createEditorTab(const QString& title) {
-    CodeEditor *editor = new CodeEditor();
-    tabWidget->addTab(editor, title);
+IEditor *EditorFactory::createEditorTab(const QString& path) {
+    CodeEditor *editor = new CodeEditor(path);
+    tabWidget->addTab(editor, editor->getTitle());
     return editor;
+}
+
+IEditor *EditorFactory::createEditorTab(int untitledId) {
+    return nullptr;
 }
 
 int EditorFactory::getEditorCount() {
@@ -22,3 +26,4 @@ IEditor *EditorFactory::getEditor(int index) {
 IEditor *EditorFactory::getCurrentEditor() {
     return dynamic_cast<CodeEditor *>(tabWidget->currentWidget());
 }
+

@@ -5,12 +5,12 @@
 #include "CodeEditor.h"
 #include <QFile>
 #include <QDebug>
+#include <QFileInfo>
 
-void CodeEditor::openFile(const QString &fileName) {
-    path = fileName;
-    QFile f(fileName);
+void CodeEditor::openFile() {
+    QFile f(path);
     if (!f.open(QFile::ReadOnly)) {
-        qWarning() << "Failed to open" << fileName << ":" << f.errorString();
+        qWarning() << "Failed to open" << path << ":" << f.errorString();
         return;
     }
     setPlainText(QString::fromUtf8(f.readAll()));
@@ -30,4 +30,9 @@ void CodeEditor::save() {
 void CodeEditor::saveAs(const QString &fileName) {
     path = fileName;
     save();
+}
+
+QString CodeEditor::getTitle() {
+    QFileInfo fileInfo(path);
+    return fileInfo.fileName();
 }
