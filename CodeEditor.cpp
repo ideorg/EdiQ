@@ -114,3 +114,14 @@ void CodeEditor::askSaveChangesBeforeClosing(IEditor::CloseEnum &canClose) {
     }
 }
 
+void CodeEditor::updateSidebarGeometry() {
+    setViewportMargins(sidebarWidth(), 0, 0, 0);
+    const auto r = contentsRect();
+    sideBar->setGeometry(QRect(r.left(), r.top(), sidebarWidth(), r.height()));
+}
+
+CodeEditor::CodeEditor(QString path) : path(std::move(path)),
+                                       sideBar(new CodeEditorSidebar(this)){
+    connect(this, &QPlainTextEdit::blockCountChanged, this, &CodeEditor::updateSidebarGeometry);
+    updateSidebarGeometry();
+}

@@ -26,7 +26,8 @@ set(PROJECT_SOURCES
         IEditorFactory.h IEditor.h
         EditorFactory.cpp EditorFactory.h
         UntitledCounter.cpp UntitledCounter.h
-        EdiException.h)
+        EdiException.h
+        CodeEditorSidebar.cpp CodeEditorSidebar.h)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}

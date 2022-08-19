@@ -11,14 +11,18 @@
 #include <utility>
 #include "IEditor.h"
 #include "QMessageBox"
+#include "CodeEditorSidebar.h"
 
 class CodeEditor : public QPlainTextEdit, public IEditor {
     QString path;
     int untitledId = 0;
     bool saveFile();
+    CodeEditorSidebar *sideBar;
+    void updateSidebarGeometry();
 public:
+    int sidebarWidth() const {return 20;};
     friend class EditorFactory;
-    explicit CodeEditor(QString path): path(std::move(path)) {}
+    explicit CodeEditor(QString path);
     ~CodeEditor() {QMessageBox::warning(this, "info", "delete "+getTitle());}
     QString getTitle() override;
     bool isModified() override;
