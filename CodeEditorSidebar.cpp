@@ -14,3 +14,8 @@ CodeEditorSidebar::CodeEditorSidebar(CodeEditor *editor)
 QSize CodeEditorSidebar::sizeHint() const {
     return QSize(codeEditor->sidebarWidth(), 0);
 }
+
+void CodeEditorSidebar::paintEvent(QPaintEvent *event)
+{
+    codeEditor->sidebarPaintEvent(event);
+}

@@ -125,3 +125,7 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)),
     connect(this, &QPlainTextEdit::blockCountChanged, this, &CodeEditor::updateSidebarGeometry);
     updateSidebarGeometry();
 }
+
+void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {
+
+}

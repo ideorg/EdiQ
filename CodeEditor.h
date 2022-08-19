@@ -21,6 +21,7 @@ class CodeEditor : public QPlainTextEdit, public IEditor {
     void updateSidebarGeometry();
 public:
     int sidebarWidth() const {return 20;};
+    void sidebarPaintEvent(QPaintEvent *event);
     friend class EditorFactory;
     explicit CodeEditor(QString path);
     ~CodeEditor() {QMessageBox::warning(this, "info", "delete "+getTitle());}

@@ -15,6 +15,8 @@ Q_OBJECT
 public:
     explicit CodeEditorSidebar(CodeEditor *editor);
     QSize sizeHint() const override;
+protected:
+    void paintEvent(QPaintEvent *event) override;
 };
 
 
