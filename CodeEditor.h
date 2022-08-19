@@ -32,6 +32,10 @@ class CodeEditor : public QPlainTextEdit, public IEditor {
 public:
     int sidebarWidth() const;
     void sidebarPaintEvent(QPaintEvent *event);
+    QTextBlock blockAtPosition(int y) const;
+    bool isFoldable(const QTextBlock &block) const;
+    bool isFolded(const QTextBlock &block) const;
+    void toggleFold(const QTextBlock &startBlock);
     friend class EditorFactory;
     explicit CodeEditor(QString path);
     QString getTitle() override;

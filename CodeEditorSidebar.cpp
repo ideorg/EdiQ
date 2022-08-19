@@ -4,6 +4,7 @@
 
 #include "CodeEditorSidebar.h"
 #include "CodeEditor.h"
+#include "QTextBlock"
 
 CodeEditorSidebar::CodeEditorSidebar(CodeEditor *editor)
         : QWidget(editor)
@@ -18,4 +19,16 @@ QSize CodeEditorSidebar::sizeHint() const {
 void CodeEditorSidebar::paintEvent(QPaintEvent *event)
 {
     codeEditor->sidebarPaintEvent(event);
+}
+
+void CodeEditorSidebar::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->pos().x() >= width() - codeEditor->fontMetrics().lineSpacing()) {
+        auto block = codeEditor->blockAtPosition(event->pos().y());
+        if (!block.isValid() || !codeEditor->isFoldable(block)) {
+            return;
+        }
+        codeEditor->toggleFold(block);
+    }
+    QWidget::mouseReleaseEvent(event);
 }
