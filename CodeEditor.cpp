@@ -13,6 +13,8 @@
 #include <QFileDialog>
 #include <QPainter>
 #include <QTextBlock>
+#include <QMenu>
+#include <QActionGroup>
 
 void CodeEditor::openFile() {
     QFile f(path);
@@ -309,4 +311,41 @@ void CodeEditor::resizeEvent(QResizeEvent *event)
 {
     QPlainTextEdit::resizeEvent(event);
     updateSidebarGeometry();
+}
+
+void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
+    auto menu = createStandardContextMenu(event->pos());
+
+    // syntax selection
+    auto hlActionGroup = new QActionGroup(menu);
+    hlActionGroup->setExclusive(true);
+    auto hlGroupMenu = menu->addMenu(QStringLiteral("Syntax"));
+    QMenu *hlSubMenu = hlGroupMenu;
+    QString currentGroup;
+    for (const auto &def : repository.definitions()) {
+        if (def.isHidden()) {
+            continue;
+        }
+        if (currentGroup != def.section()) {
+            currentGroup = def.section();
+            hlSubMenu = hlGroupMenu->addMenu(def.translatedSection());
+        }
+
+        Q_ASSERT(hlSubMenu);
+        auto action = hlSubMenu->addAction(def.translatedName());
+        action->setCheckable(true);
+        action->setData(def.name());
+        hlActionGroup->addAction(action);
+        if (def.name() == highlighter->definition().name()) {
+            action->setChecked(true);
+        }
+    }
+    connect(hlActionGroup, &QActionGroup::triggered, this, [this](QAction *action) {
+        const auto defName = action->data().toString();
+        const auto def = repository.definitionForName(defName);
+        highlighter->setDefinition(def);
+    });
+
+    menu->exec(event->globalPos());
+    delete menu;
 }

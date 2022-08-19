@@ -31,6 +31,7 @@ class CodeEditor : public QPlainTextEdit, public IEditor {
     void setTheme(const KSyntaxHighlighting::Theme &theme);
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 public:
     int sidebarWidth() const;
     void sidebarPaintEvent(QPaintEvent *event);
