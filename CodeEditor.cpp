@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QFileDialog>
+#include <QPainter>
 
 void CodeEditor::openFile() {
     QFile f(path);
@@ -127,5 +128,6 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)),
 }
 
 void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {
-
+    QPainter painter(sideBar);
+    painter.fillRect(event->rect(), Qt::gray);
 }
