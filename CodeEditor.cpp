@@ -3,6 +3,10 @@
 //
 
 #include "CodeEditor.h"
+#include <definition.h>
+#include <syntaxhighlighter.h>
+#include <theme.h>
+#include <QApplication>
 #include <QFile>
 #include <QDebug>
 #include <QFileInfo>
@@ -16,6 +20,8 @@ void CodeEditor::openFile() {
         qWarning() << "Failed to open" << path << ":" << f.errorString();
         return;
     }
+    const auto def = repository.definitionForFileName(path);
+    highlighter->setDefinition(def);
     setPlainText(QString::fromUtf8(f.readAll()));
 }
 
@@ -123,7 +129,12 @@ void CodeEditor::updateSidebarGeometry() {
 }
 
 CodeEditor::CodeEditor(QString path) : path(std::move(path)),
-                                       sideBar(new CodeEditorSidebar(this)){
+                        highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document())),
+                        sideBar(new CodeEditorSidebar(this)){
+    setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    setTheme((palette().color(QPalette::Base).lightness() < 128) ? repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+                                                                 : repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+
     connect(this, &QPlainTextEdit::blockCountChanged, this, &CodeEditor::updateSidebarGeometry);
     connect(this, &QPlainTextEdit::updateRequest, this, &CodeEditor::updateSidebarArea);
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
@@ -188,4 +199,17 @@ void CodeEditor::highlightCurrentLine() {
     QList<QTextEdit::ExtraSelection> extraSelections;
     extraSelections.append(selection);
     setExtraSelections(extraSelections);
+}
+
+void CodeEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
+{
+    auto pal = qApp->palette();
+    if (theme.isValid()) {
+        pal.setColor(QPalette::Base, theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor));
+        pal.setColor(QPalette::Highlight, theme.editorColor(KSyntaxHighlighting::Theme::TextSelection));
+    }
+    setPalette(pal);
+
+    highlighter->setTheme(theme);
+    highlighter->rehighlight();
 }

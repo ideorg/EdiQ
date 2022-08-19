@@ -5,7 +5,7 @@
 #ifndef EDIQ_CODEEDITOR_H
 #define EDIQ_CODEEDITOR_H
 
-
+#include <repository.h>
 #include <QString>
 #include <QPlainTextEdit>
 #include <utility>
@@ -13,14 +13,22 @@
 #include "QMessageBox"
 #include "CodeEditorSidebar.h"
 
+namespace KSyntaxHighlighting
+{
+    class SyntaxHighlighter;
+}
+
 class CodeEditor : public QPlainTextEdit, public IEditor {
     QString path;
     int untitledId = 0;
     bool saveFile();
     CodeEditorSidebar *sideBar;
+    KSyntaxHighlighting::Repository repository;
+    KSyntaxHighlighting::SyntaxHighlighter *highlighter;
     void updateSidebarGeometry();
     void updateSidebarArea(const QRect &rect, int dy);
     void highlightCurrentLine();
+    void setTheme(const KSyntaxHighlighting::Theme &theme);
 public:
     int sidebarWidth() const;
     void sidebarPaintEvent(QPaintEvent *event);
