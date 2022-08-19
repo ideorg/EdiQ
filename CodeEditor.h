@@ -24,7 +24,6 @@ public:
     void sidebarPaintEvent(QPaintEvent *event);
     friend class EditorFactory;
     explicit CodeEditor(QString path);
-    ~CodeEditor() {QMessageBox::warning(this, "info", "delete "+getTitle());}
     QString getTitle() override;
     bool isModified() override;
     bool isEmpty() override;
