@@ -346,6 +346,25 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
         highlighter->setDefinition(def);
     });
 
+    // theme selection
+    auto themeGroup = new QActionGroup(menu);
+    themeGroup->setExclusive(true);
+    auto themeMenu = menu->addMenu(QStringLiteral("Theme"));
+    for (const auto &theme : repository.themes()) {
+        auto action = themeMenu->addAction(theme.translatedName());
+        action->setCheckable(true);
+        action->setData(theme.name());
+        themeGroup->addAction(action);
+        if (theme.name() == highlighter->theme().name()) {
+            action->setChecked(true);
+        }
+    }
+    connect(themeGroup, &QActionGroup::triggered, this, [this](QAction *action) {
+        const auto themeName = action->data().toString();
+        const auto theme = repository.theme(themeName);
+        setTheme(theme);
+    });
+
     menu->exec(event->globalPos());
     delete menu;
 }
