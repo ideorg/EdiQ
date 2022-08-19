@@ -126,7 +126,10 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)),
                                        sideBar(new CodeEditorSidebar(this)){
     connect(this, &QPlainTextEdit::blockCountChanged, this, &CodeEditor::updateSidebarGeometry);
     connect(this, &QPlainTextEdit::updateRequest, this, &CodeEditor::updateSidebarArea);
+    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+
     updateSidebarGeometry();
+    highlightCurrentLine();
 }
 
 void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {
@@ -173,4 +176,16 @@ int CodeEditor::sidebarWidth() const
         count /= 10;
     }
     return 4 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + fontMetrics().lineSpacing();
+}
+
+void CodeEditor::highlightCurrentLine() {
+    QTextEdit::ExtraSelection selection;
+    selection.format.setBackground(Qt::cyan);
+    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+    selection.cursor = textCursor();
+    selection.cursor.clearSelection();
+
+    QList<QTextEdit::ExtraSelection> extraSelections;
+    extraSelections.append(selection);
+    setExtraSelections(extraSelections);
 }
