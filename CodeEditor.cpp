@@ -163,3 +163,14 @@ void CodeEditor::updateSidebarArea(const QRect &rect, int dy)
         sideBar->update(0, rect.y(), sideBar->width(), rect.height());
     }
 }
+
+int CodeEditor::sidebarWidth() const
+{
+    int digits = 1;
+    auto count = blockCount();
+    while (count >= 10) {
+        ++digits;
+        count /= 10;
+    }
+    return 4 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + fontMetrics().lineSpacing();
+}

@@ -21,7 +21,7 @@ class CodeEditor : public QPlainTextEdit, public IEditor {
     void updateSidebarGeometry();
     void updateSidebarArea(const QRect &rect, int dy);
 public:
-    int sidebarWidth() const {return 20;};
+    int sidebarWidth() const;
     void sidebarPaintEvent(QPaintEvent *event);
     friend class EditorFactory;
     explicit CodeEditor(QString path);
