@@ -8,6 +8,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QPainter>
+#include <QTextBlock>
 
 void CodeEditor::openFile() {
     QFile f(path);
@@ -130,7 +131,28 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)),
 
 void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {
     QPainter painter(sideBar);
-    painter.fillRect(event->rect(), Qt::gray);
+    painter.fillRect(event->rect(), Qt::yellow);
+
+    auto block = firstVisibleBlock();
+    auto blockNumber = block.blockNumber();
+    int top = blockBoundingGeometry(block).translated(contentOffset()).top();
+    int bottom = top + blockBoundingRect(block).height();
+    const int currentBlockNumber = textCursor().blockNumber();
+
+    const auto foldingMarkerSize = fontMetrics().lineSpacing();
+
+    while (block.isValid() && top <= event->rect().bottom()) {
+        if (block.isVisible() && bottom >= event->rect().top()) {
+            const auto number = QString::number(blockNumber + 1);
+            painter.setPen(Qt::black);
+            painter.drawText(0, top, sideBar->width() - 2, fontMetrics().height(), Qt::AlignRight, number);
+        }
+
+        block = block.next();
+        top = bottom;
+        bottom = top + blockBoundingRect(block).height();
+        ++blockNumber;
+    }
 }
 
 void CodeEditor::updateSidebarArea(const QRect &rect, int dy)
