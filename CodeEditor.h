@@ -29,6 +29,8 @@ class CodeEditor : public QPlainTextEdit, public IEditor {
     void updateSidebarArea(const QRect &rect, int dy);
     void highlightCurrentLine();
     void setTheme(const KSyntaxHighlighting::Theme &theme);
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 public:
     int sidebarWidth() const;
     void sidebarPaintEvent(QPaintEvent *event);

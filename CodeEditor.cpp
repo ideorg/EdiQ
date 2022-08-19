@@ -304,3 +304,9 @@ QTextBlock CodeEditor::blockAtPosition(int y) const
     } while (block.isValid());
     return QTextBlock();
 }
+
+void CodeEditor::resizeEvent(QResizeEvent *event)
+{
+    QPlainTextEdit::resizeEvent(event);
+    updateSidebarGeometry();
+}
