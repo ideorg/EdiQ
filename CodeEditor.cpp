@@ -234,6 +234,7 @@ void CodeEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
 
     highlighter->setTheme(theme);
     highlighter->rehighlight();
+    highlightCurrentLine();;
 }
 
 bool CodeEditor::isFoldable(const QTextBlock &block) const
