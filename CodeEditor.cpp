@@ -124,10 +124,20 @@ void CodeEditor::updateSidebarGeometry() {
 CodeEditor::CodeEditor(QString path) : path(std::move(path)),
                                        sideBar(new CodeEditorSidebar(this)){
     connect(this, &QPlainTextEdit::blockCountChanged, this, &CodeEditor::updateSidebarGeometry);
+    connect(this, &QPlainTextEdit::updateRequest, this, &CodeEditor::updateSidebarArea);
     updateSidebarGeometry();
 }
 
 void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {
     QPainter painter(sideBar);
     painter.fillRect(event->rect(), Qt::gray);
+}
+
+void CodeEditor::updateSidebarArea(const QRect &rect, int dy)
+{
+    if (dy) {
+        sideBar->scroll(0, dy);
+    } else {
+        sideBar->update(0, rect.y(), sideBar->width(), rect.height());
+    }
 }
