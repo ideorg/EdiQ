@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>svg/Arrow_up.svg</file>
+        <file>svg/Arrow_down.svg</file>
+        <file>svg/Magnifying_glass.svg</file>
+    </qresource>
+</RCC>

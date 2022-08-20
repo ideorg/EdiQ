@@ -28,11 +28,14 @@ set(PROJECT_SOURCES
         UntitledCounter.cpp UntitledCounter.h
         EdiException.h
         CodeEditorSidebar.cpp CodeEditorSidebar.h
-        PlainTextEdit.h)
+        PlainTextEdit.h
+        SearchBar.cpp SearchBar.h
+        Popup.cpp Popup.h)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
+            res/icons.qrc
         ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
@@ -48,6 +51,7 @@ else()
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(${PROJECT_NAME}
+                res/icons.qrc
             ${PROJECT_SOURCES}
         )
     endif()

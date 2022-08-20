@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "EditorFactory.h"
+#include "SearchBar.h"
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QCloseEvent>

@@ -1,5 +1,5 @@
 //
-// Created by andrzej on 8/17/22.
+// Created by Andrzej Borucki on 2022-08-17
 //
 
 #include "EditorFactory.h"

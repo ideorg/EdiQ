@@ -7,7 +7,7 @@
 #include "QTextBlock"
 
 CodeEditorSidebar::CodeEditorSidebar(CodeEditor *editor)
-        : QWidget(editor)
+        : QWidget(editor->plainEdit)
         , codeEditor(editor)
 {
 }

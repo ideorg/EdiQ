@@ -12,6 +12,7 @@
 #include "IEditor.h"
 #include "QMessageBox"
 #include "CodeEditorSidebar.h"
+#include "SearchBar.h"
 #include "PlainTextEdit.h"
 
 namespace KSyntaxHighlighting
@@ -24,7 +25,7 @@ class CodeEditor : public QWidget, public IEditor {
     int untitledId = 0;
     bool saveFile();
     CodeEditorSidebar *sideBar;
-    PlainTextEdit *plainEdit;
+    SearchBar *searchBar;
     KSyntaxHighlighting::Repository repository;
     KSyntaxHighlighting::SyntaxHighlighter *highlighter;
     void updateSidebarGeometry();
@@ -33,6 +34,7 @@ class CodeEditor : public QWidget, public IEditor {
     void setTheme(const KSyntaxHighlighting::Theme &theme);
 public:
     explicit CodeEditor(QString path);
+    PlainTextEdit *plainEdit;
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
 public:

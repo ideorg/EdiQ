@@ -1,0 +1,140 @@
+//
+//
+// Created by Andrzej Borucki on 2022-08-20
+//
+
+#include "Popup.h"
+#include <QEvent>
+#include <QDebug>
+#include <QApplication>
+#include <QScreen>
+#include <QMouseEvent>
+#include <QScrollBar>
+
+Popup::Popup(QWidget *parent) : QListWidget(parent),parent(parent) {
+    leftButtonPressed = false;
+    for (int i=0; i<20; i++) {
+        addItem("aaa");
+        addItem("vvvv");
+        addItem("vvvv012323456789vvvv0123456789vvvv0123456789vvvv0123456789vvvv0123456789");
+    }
+}
+
+bool Popup::eventFilter(QObject *obj, QEvent *e) {
+    Q_UNUSED(obj)
+    if (e->type() == QEvent::MouseMove ||
+        e->type() == QEvent::HoverMove ||
+        e->type() == QEvent::Leave ||
+        e->type() == QEvent::MouseButtonPress ||
+        e->type() == QEvent::MouseButtonRelease) {
+
+        switch (e->type()) {
+            case QEvent::MouseMove:
+                return mouseMove(static_cast<QMouseEvent*>(e));
+                break;
+            case QEvent::Leave:
+                mouseLeave(e);
+                return false;
+                break;
+            case QEvent::MouseButtonPress:
+                return mousePress(static_cast<QMouseEvent*>(e));
+                break;
+            case QEvent::MouseButtonRelease:
+                mouseRelease(static_cast<QMouseEvent *>(e));
+                return false;
+                break;
+            default: return false;
+        }
+    }
+    else {
+        if (e->type() == QEvent::FocusIn)
+            focusChanged(true);
+        else if (e->type() == QEvent::FocusOut)
+            focusChanged(false);
+        return false;
+    }
+}
+
+void Popup::focusChanged(bool in) {
+    if (!in) {
+        outFocusCounter++;
+        if (outFocusCounter>=4) {
+            qApp->removeEventFilter(this);
+            hide();
+        }
+    }
+}
+
+void Popup::popup(QPoint bottomLeft) {
+    show();
+    setGeometry(QRect(bottomLeft, QSize(200,200)));
+    installFilter();
+}
+
+void Popup::installFilter() {
+    outFocusCounter = 0;
+    qApp->installEventFilter(this);
+}
+
+void Popup::mouseHover(QHoverEvent *e) {
+    updateCursorShape(e->pos());
+}
+
+void Popup::mouseLeave(QEvent *e) {
+    if (!leftButtonPressed) {
+        unsetCursor();
+    }
+}
+
+bool Popup::mousePress(QMouseEvent *e) {
+    if (e->button() & Qt::LeftButton) {
+        leftButtonPressed = true;
+        if (isDragPos(e->pos())) {
+            dragStart = true;
+            dragPos = e->pos();
+            startWidth = width();
+            startHeight = height();
+            return true;
+        }
+    }
+    return false;
+}
+
+void Popup::mouseRelease(QMouseEvent *e) {
+    if (e->button() & Qt::LeftButton) {
+        leftButtonPressed = false;
+        dragStart = false;
+    }
+}
+
+bool Popup::mouseMove(QMouseEvent *e) {
+    if (leftButtonPressed) {
+        if (dragStart) {
+            QScreen *screen = QGuiApplication::primaryScreen();
+            QRect geometry = screen->availableGeometry();
+            if (e->globalPos().x() >= geometry.right()-verticalScrollBar()->width()) return false;
+            if (e->globalPos().y() >= geometry.bottom()-horizontalScrollBar()->height()) return false;
+            int newW = e->pos().x() - dragPos.x() + startWidth;
+            int newH = e->pos().y() - dragPos.y() + startHeight;
+            if (newW <= verticalScrollBar()->width()) return false;
+            if (newH <= horizontalScrollBar()->height()) return false;
+            resize(newW, newH);
+            return true;
+        }
+    }
+    else
+        updateCursorShape(e->pos());
+    return false;
+}
+
+void Popup::updateCursorShape(const QPoint &pos) {
+    if (isDragPos(pos))
+        setCursor(Qt::SizeFDiagCursor);
+    else
+        unsetCursor();
+}
+
+bool Popup::isDragPos(const QPoint &pos) {
+    return pos.x()>width()-verticalScrollBar()->width()
+        && pos.y()>height()-horizontalScrollBar()->height();
+}
