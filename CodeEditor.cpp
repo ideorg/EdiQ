@@ -15,6 +15,8 @@
 #include <QTextBlock>
 #include <QMenu>
 #include <QActionGroup>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 void CodeEditor::openFile() {
     QFile f(path);
@@ -24,12 +26,12 @@ void CodeEditor::openFile() {
     }
     const auto def = repository.definitionForFileName(path);
     highlighter->setDefinition(def);
-    setPlainText(QString::fromUtf8(f.readAll()));
+    plainEdit->setPlainText(QString::fromUtf8(f.readAll()));
 }
 
 bool CodeEditor::saveFile() {
     assert(!path.isEmpty());
-    QString text = toPlainText();
+    QString text = plainEdit->toPlainText();
     QFile f(path);
     if (!f.open(QFile::WriteOnly)) {
         qWarning() << "Failed to open" << path << ":" << f.errorString();
@@ -68,11 +70,11 @@ QString CodeEditor::getTitle() {
 }
 
 bool CodeEditor::isModified() {
-    return document()->isModified();
+    return plainEdit->document()->isModified();
 }
 
 bool CodeEditor::isEmpty() {
-    return document()->isEmpty();
+    return plainEdit->document()->isEmpty();
 }
 
 IEditor::ConsiderEnum CodeEditor::consider() {
@@ -125,21 +127,25 @@ void CodeEditor::askSaveChangesBeforeClosing(IEditor::CloseEnum &canClose) {
 }
 
 void CodeEditor::updateSidebarGeometry() {
-    setViewportMargins(sidebarWidth(), 0, 0, 0);
-    const auto r = contentsRect();
-    sideBar->setGeometry(QRect(r.left(), r.top(), sidebarWidth(), r.height()));
+    sideBar->setFixedWidth(sidebarWidth());
 }
 
-CodeEditor::CodeEditor(QString path) : path(std::move(path)),
-                        highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document())),
-                        sideBar(new CodeEditorSidebar(this)){
-    setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
+    plainEdit = new PlainTextEdit(this);
+    sideBar = new CodeEditorSidebar(this);
+    auto *hLayout = new QHBoxLayout;
+    hLayout->setContentsMargins(0,0,0,0);
+    hLayout->setSpacing(0);
+    hLayout->addWidget(sideBar);
+    hLayout->addWidget(plainEdit);
+    setLayout(hLayout);
+    highlighter = new KSyntaxHighlighting::SyntaxHighlighter(plainEdit->document());
+    plainEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     setTheme((palette().color(QPalette::Base).lightness() < 128) ? repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
                                                                  : repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
-
-    connect(this, &QPlainTextEdit::blockCountChanged, this, &CodeEditor::updateSidebarGeometry);
-    connect(this, &QPlainTextEdit::updateRequest, this, &CodeEditor::updateSidebarArea);
-    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+    connect(plainEdit, &QPlainTextEdit::blockCountChanged, this, &CodeEditor::updateSidebarGeometry);
+    connect(plainEdit, &QPlainTextEdit::updateRequest, this, &CodeEditor::updateSidebarArea);
+    connect(plainEdit, &QPlainTextEdit::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
 
     updateSidebarGeometry();
     highlightCurrentLine();
@@ -149,20 +155,19 @@ void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {
     QPainter painter(sideBar);
     painter.fillRect(event->rect(), highlighter->theme().editorColor(KSyntaxHighlighting::Theme::IconBorder));
 
-    auto block = firstVisibleBlock();
+    auto block = plainEdit->firstVisibleBlock_pub();
     auto blockNumber = block.blockNumber();
-    int top = blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + blockBoundingRect(block).height();
-    const int currentBlockNumber = textCursor().blockNumber();
+    int top = plainEdit->blockBoundingGeometry_pub(block).translated(plainEdit->contentOffset_pub()).top();
+    int bottom = top + plainEdit->blockBoundingRect_pub(block).height();
+    const int currentBlockNumber = plainEdit->textCursor().blockNumber();
 
     const auto foldingMarkerSize = fontMetrics().lineSpacing();
 
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             const auto number = QString::number(blockNumber + 1);
-            painter.setPen(highlighter->theme().editorColor((blockNumber == currentBlockNumber) ? KSyntaxHighlighting::Theme::CurrentLineNumber
-                                                                                                  : KSyntaxHighlighting::Theme::LineNumbers));
-            painter.drawText(0, top, sideBar->width() - 2 - foldingMarkerSize, fontMetrics().height(), Qt::AlignRight, number);
+            painter.setPen(highlighter->theme().editorColor((blockNumber == currentBlockNumber) ? KSyntaxHighlighting::Theme::CurrentLineNumber             : KSyntaxHighlighting::Theme::LineNumbers));
+            painter.drawText(2, top, sideBar->width(), fontMetrics().height(), Qt::AlignLeft, number);
         }
 
         // folding marker
@@ -188,7 +193,7 @@ void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {
 
         block = block.next();
         top = bottom;
-        bottom = top + blockBoundingRect(block).height();
+        bottom = top + plainEdit->blockBoundingRect_pub(block).height();
         ++blockNumber;
     }
 }
@@ -205,7 +210,7 @@ void CodeEditor::updateSidebarArea(const QRect &rect, int dy)
 int CodeEditor::sidebarWidth() const
 {
     int digits = 1;
-    auto count = blockCount();
+    auto count = plainEdit->blockCount();
     while (count >= 10) {
         ++digits;
         count /= 10;
@@ -217,12 +222,12 @@ void CodeEditor::highlightCurrentLine() {
     QTextEdit::ExtraSelection selection;
     selection.format.setBackground(Qt::cyan);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-    selection.cursor = textCursor();
+    selection.cursor = plainEdit->textCursor();
     selection.cursor.clearSelection();
 
     QList<QTextEdit::ExtraSelection> extraSelections;
     extraSelections.append(selection);
-    setExtraSelections(extraSelections);
+    plainEdit->setExtraSelections(extraSelections);
 }
 
 void CodeEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
@@ -281,40 +286,34 @@ void CodeEditor::toggleFold(const QTextBlock &startBlock)
     }
 
     // redraw document
-    document()->markContentsDirty(startBlock.position(), endBlock.position() - startBlock.position() + 1);
+    plainEdit->document()->markContentsDirty(startBlock.position(), endBlock.position() - startBlock.position() + 1);
 
     // update scrollbars
-    Q_EMIT document()->documentLayout()->documentSizeChanged(document()->documentLayout()->documentSize());
+    Q_EMIT plainEdit->document()->documentLayout()->documentSizeChanged(plainEdit->document()->documentLayout()->documentSize());
 }
 
 QTextBlock CodeEditor::blockAtPosition(int y) const
 {
-    auto block = firstVisibleBlock();
+    auto block = plainEdit->firstVisibleBlock_pub();
     if (!block.isValid()) {
         return QTextBlock();
     }
 
-    int top = blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + blockBoundingRect(block).height();
+    int top = plainEdit->blockBoundingGeometry_pub(block).translated(plainEdit->contentOffset_pub()).top();
+    int bottom = top + plainEdit->blockBoundingRect_pub(block).height();
     do {
         if (top <= y && y <= bottom) {
             return block;
         }
         block = block.next();
         top = bottom;
-        bottom = top + blockBoundingRect(block).height();
+        bottom = top + plainEdit->blockBoundingRect_pub(block).height();
     } while (block.isValid());
     return QTextBlock();
 }
 
-void CodeEditor::resizeEvent(QResizeEvent *event)
-{
-    QPlainTextEdit::resizeEvent(event);
-    updateSidebarGeometry();
-}
-
 void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
-    auto menu = createStandardContextMenu(event->pos());
+    auto menu = plainEdit->createStandardContextMenu(event->pos());
 
     // syntax selection
     auto hlActionGroup = new QActionGroup(menu);

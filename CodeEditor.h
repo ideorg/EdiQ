@@ -12,25 +12,28 @@
 #include "IEditor.h"
 #include "QMessageBox"
 #include "CodeEditorSidebar.h"
+#include "PlainTextEdit.h"
 
 namespace KSyntaxHighlighting
 {
     class SyntaxHighlighter;
 }
 
-class CodeEditor : public QPlainTextEdit, public IEditor {
+class CodeEditor : public QWidget, public IEditor {
     QString path;
     int untitledId = 0;
     bool saveFile();
     CodeEditorSidebar *sideBar;
+    PlainTextEdit *plainEdit;
     KSyntaxHighlighting::Repository repository;
     KSyntaxHighlighting::SyntaxHighlighter *highlighter;
     void updateSidebarGeometry();
     void updateSidebarArea(const QRect &rect, int dy);
     void highlightCurrentLine();
     void setTheme(const KSyntaxHighlighting::Theme &theme);
+public:
+    explicit CodeEditor(QString path);
 protected:
-    void resizeEvent(QResizeEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
 public:
     int sidebarWidth() const;
@@ -40,7 +43,6 @@ public:
     bool isFolded(const QTextBlock &block) const;
     void toggleFold(const QTextBlock &startBlock);
     friend class EditorFactory;
-    explicit CodeEditor(QString path);
     QString getTitle() override;
     bool isModified() override;
     bool isEmpty() override;

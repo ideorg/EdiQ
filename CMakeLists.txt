@@ -13,7 +13,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
@@ -27,7 +27,8 @@ set(PROJECT_SOURCES
         EditorFactory.cpp EditorFactory.h
         UntitledCounter.cpp UntitledCounter.h
         EdiException.h
-        CodeEditorSidebar.cpp CodeEditorSidebar.h)
+        CodeEditorSidebar.cpp CodeEditorSidebar.h
+        PlainTextEdit.h)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
