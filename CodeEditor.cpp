@@ -157,6 +157,30 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
     highlightCurrentLine();
 }
 
+void CodeEditor::search(const QString &searchString) {
+    if (searchString.isEmpty()) return;
+    bool found = false;
+    QTextCursor highlightCursor(plainEdit->document());
+    QTextCursor cursor(plainEdit->document());
+    cursor.beginEditBlock();
+    QTextCharFormat plainFormat(highlightCursor.charFormat());
+    QTextCharFormat colorFormat = plainFormat;
+    colorFormat.setForeground(Qt::red);
+    colorFormat.setBackground(Qt::yellow);
+    while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
+        highlightCursor = plainEdit->document()->find(searchString, highlightCursor,
+                                         QTextDocument::FindWholeWords);
+
+        if (!highlightCursor.isNull()) {
+            found = true;
+            highlightCursor.movePosition(QTextCursor::WordRight,
+                                         QTextCursor::KeepAnchor);
+            highlightCursor.mergeCharFormat(colorFormat);
+        }
+    }
+    cursor.endEditBlock();
+}
+
 void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {
     QPainter painter(sideBar);
     painter.fillRect(event->rect(), highlighter->theme().editorColor(KSyntaxHighlighting::Theme::IconBorder));

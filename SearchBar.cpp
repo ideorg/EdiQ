@@ -23,8 +23,9 @@ SearchBar::SearchBar(CodeEditor *editor)
     popup->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint
         );
     connect(button,&QPushButton::clicked,[=](){
-        QPoint bottomLeft = mapToGlobal(button->geometry().bottomLeft());
-        popup->popup(bottomLeft);
+        //QPoint bottomLeft = mapToGlobal(button->geometry().bottomLeft());
+        //popup->popup(bottomLeft);
+        search(textToFind->text());
     });
     qApp->installEventFilter(this);
 }
@@ -38,8 +39,8 @@ void SearchBar::addControls() {
     button->setContentsMargins(0,0,0,0);
     button->setIcon(QIcon(":/svg/Magnifying_glass.svg"));
     hLayout->addWidget(button);
-    auto *edit = new QLineEdit(this);
-    hLayout->addWidget(edit);
+    textToFind = new QLineEdit(this);
+    hLayout->addWidget(textToFind);
     auto *toolBar1 = new QToolBar(this);
     auto *btn1 = new QToolButton(toolBar1);
     btn1->setCheckable(true);
@@ -76,4 +77,8 @@ void SearchBar::addControls() {
     toolBar3->addWidget(btn7);
     btn7->setText("x");
     setLayout(hLayout);
+}
+
+void SearchBar::search(const QString &text) {
+    codeEditor->search(text);
 }

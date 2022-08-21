@@ -17,6 +17,8 @@ class SearchBar : public QWidget {
     void addControls();
     Popup *popup;
     QPushButton *button;
+    QLineEdit *textToFind;
+    void search(const QString &text);
 public:
     explicit SearchBar(CodeEditor *editor);
 };
