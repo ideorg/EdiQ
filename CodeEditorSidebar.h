@@ -1,6 +1,11 @@
-//
-// Created by Andrzej Borucki on 2022-08-19
-//
+/****************************************************************************
+**
+** Created by Andrzej Borucki on 2022-08-19
+**
+** This file is part of the EdiQ project
+** see file LICENSE
+**
+****************************************************************************/
 
 #ifndef EDIQ_CODEEDITORSIDEBAR_H
 #define EDIQ_CODEEDITORSIDEBAR_H

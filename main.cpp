@@ -1,3 +1,12 @@
+/****************************************************************************
+**
+** Created by Andrzej Borucki on 2022-08-17
+**
+** This file is part of the EdiQ project
+** see file LICENSE
+**
+****************************************************************************/
+
 #include "mainwindow.h"
 
 #include <QApplication>

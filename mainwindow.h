@@ -1,3 +1,12 @@
+/****************************************************************************
+**
+** Created by Andrzej Borucki on 2022-08-17
+**
+** This file is part of the EdiQ project
+** see file LICENSE
+**
+****************************************************************************/
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

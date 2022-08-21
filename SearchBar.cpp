@@ -1,6 +1,11 @@
-//
-// Created by Andrzej Borucki on 2022-08-20
-//
+/****************************************************************************
+**
+** Created by Andrzej Borucki on 2022-08-20
+**
+** This file is part of the EdiQ project
+** see file LICENSE
+**
+****************************************************************************/
 
 #include <QHBoxLayout>
 #include <QLineEdit>

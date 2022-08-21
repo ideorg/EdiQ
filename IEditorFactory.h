@@ -1,10 +1,14 @@
-//
-// Created by Andrzej Borucki on 2022-08-17
-//
+/****************************************************************************
+**
+** Created by Andrzej Borucki on 2022-08-17
+**
+** This file is part of the EdiQ project
+** see file LICENSE
+**
+****************************************************************************/
 
 #ifndef EDIQ_IEDITORFACTORY_H
 #define EDIQ_IEDITORFACTORY_H
-
 
 #include "IEditor.h"
 
