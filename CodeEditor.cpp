@@ -174,12 +174,10 @@ void CodeEditor::search(const QString &searchString) {
     colorFormat.setBackground(Qt::yellow);
     while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
         highlightCursor = plainEdit->document()->find(searchString, highlightCursor,
-                                         QTextDocument::FindWholeWords);
+                                         QTextDocument::FindFlag(0));
 
         if (!highlightCursor.isNull()) {
             found = true;
-            highlightCursor.movePosition(QTextCursor::WordRight,
-                                         QTextCursor::KeepAnchor);
             highlightCursor.mergeCharFormat(colorFormat);
         }
     }
