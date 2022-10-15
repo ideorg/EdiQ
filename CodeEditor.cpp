@@ -162,7 +162,7 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
     highlightCurrentLine();
 }
 
-int CodeEditor::search(const QString &searchString) {
+int CodeEditor::search(const QString &searchString, QTextDocument::FindFlag findFlag) {
     bool modifiedBefore = plainEdit->document()->isModified();
     QTextCursor cursor(plainEdit->document());
     cursor.select(QTextCursor::Document);
@@ -180,8 +180,7 @@ int CodeEditor::search(const QString &searchString) {
     QTextCharFormat colorFormat = plainFormat;
     colorFormat.setBackground(Qt::yellow);
     while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
-        highlightCursor = plainEdit->document()->find(searchString, highlightCursor,
-                                         QTextDocument::FindFlag(0));
+        highlightCursor = plainEdit->document()->find(searchString, highlightCursor,findFlag);
         if (!highlightCursor.isNull()) {
             found = true;
             n++;

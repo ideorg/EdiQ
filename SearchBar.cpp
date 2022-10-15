@@ -10,7 +10,6 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QToolBar>
-#include <QToolButton>
 #include <QPalette>
 #include <QApplication>
 #include "SearchBar.h"
@@ -26,11 +25,9 @@ SearchBar::SearchBar(CodeEditor *editor)
     popup = new Popup(editor);
     popup->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint
         );
-    connect(textToFind, &QLineEdit::textChanged, [=](){
-        //QPoint bottomLeft = mapToGlobal(button->geometry().bottomLeft());
-        //popup->popup(bottomLeft);
-        search(textToFind->text());
-    });
+    connect(textToFind, &QLineEdit::textChanged, this, &SearchBar::search);
+    connect(caseSensitiveButton, &QToolButton::clicked, this, &SearchBar::search);
+    connect(wholeWordsButton, &QToolButton::clicked, this, &SearchBar::search);
     qApp->installEventFilter(this);
 }
 
@@ -46,14 +43,14 @@ void SearchBar::addControls() {
     textToFind = new QLineEdit(this);
     hLayout->addWidget(textToFind);
     auto *toolBar1 = new QToolBar(this);
-    auto *btn1 = new QToolButton(toolBar1);
-    btn1->setCheckable(true);
-    btn1->setText("Cc");
-    toolBar1->addWidget(btn1);
-    auto *btn2 = new QToolButton(toolBar1);
-    btn2->setCheckable(true);
-    btn2->setText("W");
-    toolBar1->addWidget(btn2);
+    caseSensitiveButton = new QToolButton(toolBar1);
+    caseSensitiveButton->setCheckable(true);
+    caseSensitiveButton->setText("Cc");
+    toolBar1->addWidget(caseSensitiveButton);
+    wholeWordsButton = new QToolButton(toolBar1);
+    wholeWordsButton->setCheckable(true);
+    wholeWordsButton->setText("W");
+    toolBar1->addWidget(wholeWordsButton);
     auto *btn3 = new QToolButton(toolBar1);
     btn3->setCheckable(true);
     btn3->setText(".*");
@@ -83,8 +80,13 @@ void SearchBar::addControls() {
     setLayout(hLayout);
 }
 
-void SearchBar::search(const QString &text) {
-    int n = codeEditor->search(text);
+void SearchBar::search() {
+    int flags = 0;
+    if (caseSensitiveButton->isChecked())
+        flags |= QTextDocument::FindCaseSensitively;
+    if (wholeWordsButton->isChecked())
+        flags |= QTextDocument::FindWholeWords;
+    int n = codeEditor->search(textToFind->text(), QTextDocument::FindFlag(flags));
     if (n==1)
         resultsCount->setText("1 result");
     else
