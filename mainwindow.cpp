@@ -95,6 +95,9 @@ void MainWindow::openOrActivate(QString path) {
         editor->openFile();
         editorFactory->onTextChanged();
     }
+    tabWidget.setTabsClosable(true);
+    tabWidget.setMovable(true);
+    tabWidget.setTabPosition(QTabWidget::South);
     tabWidget.setCurrentWidget(editor);
     editor->setFocus();
 }
