@@ -1,4 +1,3 @@
-* search in editor
 * one instance
 * open and activate
 * messages from other instance

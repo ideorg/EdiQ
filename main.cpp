@@ -10,17 +10,32 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <SingleApplication>
 #include <QScreen>
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
-    MainWindow mainWindow;
+    SingleApplication app(argc, argv, true);
+
     QScreen *screen = QGuiApplication::primaryScreen();
-    QRect  geometry = screen->availableGeometry();
-    const int H = 28; //border height;
-    mainWindow.setGeometry(int(geometry.width() * 0.1), int(geometry.height() * 0.05)+H,
-                           int(geometry.width() * 0.8), int(geometry.height() * 0.9)-H);
-    mainWindow.show();
-    return app.exec();
+    QRect  screenGeometry = screen->geometry();
+
+    // If this is a secondary instance
+    if( app.isSecondary() ) {
+        app.sendMessage( app.arguments().join(' ').toUtf8() );
+        return 0;
+    } else {
+        MainWindow mainWindow;
+        /*QObject::connect(
+                &app,
+                &SingleApplication::receivedMessage,
+                &mainWindow,
+                &MainWindow::receivedMessage
+        );
+        for (int i=1; i<app.arguments().size(); i++)
+            mainWindow.openOrActivate(app.arguments()[i]);*/
+        mainWindow.resize(int(screenGeometry.width()*0.8), int(screenGeometry.height()*0.8));
+        mainWindow.show();
+        return app.exec();
+    }
 }
