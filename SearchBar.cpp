@@ -103,6 +103,7 @@ void SearchBar::search() {
     else
         resultsCount->setText(QString::number(searchState.currResult+1)+"/"
                         +QString::number(searchState.resCount));
+    textToFind->setFocus();
 }
 
 void SearchBar::closeSearch() {

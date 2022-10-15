@@ -38,12 +38,12 @@ class SearchBar : public QWidget {
     QToolButton *wholeWordsButton;
     QToolButton *regExpButton;
     QToolButton *closeButton;
-    void search();
     void closeSearch();
 public:
     explicit SearchBar(CodeEditor *editor);
     SearchState searchState;
     QLineEdit *textToFind;
+    void search();
 };
 
 

@@ -148,6 +148,7 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
     hLayout->setSpacing(0);
     hLayout->addWidget(sideBar);
     hLayout->addWidget(plainEdit);
+    searchBar->hide();
     vLayout->addWidget(searchBar);
     vLayout->addLayout(hLayout);
     setLayout(vLayout);
@@ -428,7 +429,11 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
 }
 
 void CodeEditor::find() {
-
+    auto selText = plainEdit->textCursor().selectedText();
+    if (!selText.isEmpty())
+        searchBar->textToFind->setText(selText);
+    searchBar->show();
+    searchBar->search();
 }
 
 void CodeEditor::findNextPrevious(bool previous) {

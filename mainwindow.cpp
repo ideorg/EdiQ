@@ -113,7 +113,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::findSearch() {
-
+    IEditor *editor = editorFactory->getCurrentEditor();
+    if (!editor) return;
+    editor->find();
 }
 
 void MainWindow::findNextSearch() {
