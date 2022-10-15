@@ -162,7 +162,7 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
     highlightCurrentLine();
 }
 
-std::pair<int,int> CodeEditor::search(const QString &searchString, QTextDocument::FindFlag findFlag, bool isRegExp) {
+void CodeEditor::search(const QString &searchString, QTextDocument::FindFlag findFlag, bool isRegExp) {
     bool modifiedBefore = plainEdit->document()->isModified();
     QRegExp regExp(searchString);
     QTextCursor selCursor;
@@ -173,9 +173,8 @@ std::pair<int,int> CodeEditor::search(const QString &searchString, QTextDocument
     cursor.clearSelection();
     if (searchString.isEmpty()) {
         plainEdit->document()->setModified(modifiedBefore);
-        return std::make_pair(0,0);
+        searchBar->searchState.resCount = searchBar->searchState.currResult = 0;
     }
-    std::pair<int,int> p;
     bool found = false;
     QTextCursor highlightCursor(plainEdit->document());
     cursor.beginEditBlock();
@@ -183,6 +182,8 @@ std::pair<int,int> CodeEditor::search(const QString &searchString, QTextDocument
     QTextCharFormat colorFormat = plainFormat;
     colorFormat.setBackground(Qt::yellow);
     bool setSelected = false;
+    searchBar->searchState.resCount = 0;
+    searchBar->searchState.currResult = 0;
     while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
         if (isRegExp)
             highlightCursor = plainEdit->document()->find(regExp, highlightCursor,findFlag);
@@ -190,10 +191,10 @@ std::pair<int,int> CodeEditor::search(const QString &searchString, QTextDocument
             highlightCursor = plainEdit->document()->find(searchString, highlightCursor,findFlag);
         if (!highlightCursor.isNull()) {
             found = true;
-            p.second++;
+            searchBar->searchState.resCount++;
             highlightCursor.mergeCharFormat(colorFormat);
             if (highlightCursor.anchor()<selCursor.anchor())
-                p.first++;
+                searchBar->searchState.currResult++;
             else if (!setSelected){
                 selCursor.setPosition(highlightCursor.anchor());
                 selCursor.setPosition(highlightCursor.position(), QTextCursor::KeepAnchor);
@@ -206,7 +207,6 @@ std::pair<int,int> CodeEditor::search(const QString &searchString, QTextDocument
         plainEdit->setTextCursor(selCursor);
     }
     plainEdit->document()->setModified(modifiedBefore);
-    return p;
 }
 
 void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {

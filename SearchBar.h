@@ -41,6 +41,7 @@ class SearchBar : public QWidget {
     void search();
 public:
     explicit SearchBar(CodeEditor *editor);
+    SearchState searchState;
 };
 
 

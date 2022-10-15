@@ -31,7 +31,6 @@ class CodeEditor : public QWidget, public IEditor {
     bool saveFile();
     CodeEditorSidebar *sideBar;
     SearchBar *searchBar;
-    SearchState searchState;
     KSyntaxHighlighting::Repository repository;
     KSyntaxHighlighting::SyntaxHighlighter *highlighter;
     void updateSidebarGeometry();
@@ -41,7 +40,7 @@ class CodeEditor : public QWidget, public IEditor {
 public:
     explicit CodeEditor(QString path);
     PlainTextEdit *plainEdit;
-    std::pair<int,int> search(const QString &searchString, QTextDocument::FindFlag findFlag, bool isRegExp);
+    void search(const QString &searchString, QTextDocument::FindFlag findFlag, bool isRegExp);
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
 public:
