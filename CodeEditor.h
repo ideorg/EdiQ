@@ -40,7 +40,7 @@ class CodeEditor : public QWidget, public IEditor {
 public:
     explicit CodeEditor(QString path);
     PlainTextEdit *plainEdit;
-    void search(const QString &searchString);
+    int search(const QString &searchString);
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
 public:

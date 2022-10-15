@@ -11,7 +11,6 @@
 #include <QLineEdit>
 #include <QToolBar>
 #include <QToolButton>
-#include <QLabel>
 #include <QPalette>
 #include <QApplication>
 #include "SearchBar.h"
@@ -60,10 +59,10 @@ void SearchBar::addControls() {
     btn3->setText(".*");
     toolBar1->addWidget(btn3);
     hLayout->addWidget(toolBar1);
-    auto* label = new QLabel(this);
-    label->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    label->setText("0 results");
-    hLayout->addWidget(label);
+    resultsCount = new QLabel(this);
+    resultsCount->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    resultsCount->setText("0 results");
+    hLayout->addWidget(resultsCount);
     auto *toolBar2 = new QToolBar(this);
     auto *btn4 = new QToolButton(toolBar2);
     btn4->setIcon(QIcon(":/svg/Arrow_up.svg"));
@@ -85,5 +84,9 @@ void SearchBar::addControls() {
 }
 
 void SearchBar::search(const QString &text) {
-    codeEditor->search(text);
+    int n = codeEditor->search(text);
+    if (n==1)
+        resultsCount->setText("1 result");
+    else
+        resultsCount->setText(QString::number(n)+" results");
 }

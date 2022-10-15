@@ -162,7 +162,7 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
     highlightCurrentLine();
 }
 
-void CodeEditor::search(const QString &searchString) {
+int CodeEditor::search(const QString &searchString) {
     bool modifiedBefore = plainEdit->document()->isModified();
     QTextCursor cursor(plainEdit->document());
     cursor.select(QTextCursor::Document);
@@ -170,8 +170,9 @@ void CodeEditor::search(const QString &searchString) {
     cursor.clearSelection();
     if (searchString.isEmpty()) {
         plainEdit->document()->setModified(modifiedBefore);
-        return;
+        return 0;
     }
+    int n  = 0;
     bool found = false;
     QTextCursor highlightCursor(plainEdit->document());
     cursor.beginEditBlock();
@@ -183,11 +184,13 @@ void CodeEditor::search(const QString &searchString) {
                                          QTextDocument::FindFlag(0));
         if (!highlightCursor.isNull()) {
             found = true;
+            n++;
             highlightCursor.mergeCharFormat(colorFormat);
         }
     }
     cursor.endEditBlock();
     plainEdit->document()->setModified(modifiedBefore);
+    return n;
 }
 
 void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {

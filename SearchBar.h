@@ -13,6 +13,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QTimer>
+#include <QLabel>
 #include "Popup.h"
 
 class CodeEditor;
@@ -23,6 +24,7 @@ class SearchBar : public QWidget {
     Popup *popup;
     QPushButton *button;
     QLineEdit *textToFind;
+    QLabel *resultsCount;
     void search(const QString &text);
 public:
     explicit SearchBar(CodeEditor *editor);
