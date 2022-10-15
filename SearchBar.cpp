@@ -121,6 +121,7 @@ void SearchBar::search() {
     else
         resultsCount->setText(QString::number(searchState.currResult+1)+"/"
                         +QString::number(searchState.resCount));
+    popup->addToHistory(textToFind->text());
     textToFind->setFocus();
 }
 

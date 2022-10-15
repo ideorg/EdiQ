@@ -19,11 +19,6 @@ int select();
 
 Popup::Popup(QWidget *parent) : QListWidget(parent), parent(parent) {
     leftButtonPressed = false;
-    for (int i=0; i<2; i++) {
-        addItem("a");
-        addItem("e");
-        addItem("the");
-    }
 }
 
 bool Popup::eventFilter(QObject *obj, QEvent *e) {
@@ -159,4 +154,30 @@ void Popup::updateCursorShape(const QPoint &pos) {
 bool Popup::isDragPos(const QPoint &pos) {
     return pos.x()>width()-verticalScrollBar()->width()
         && pos.y()>height()-horizontalScrollBar()->height();
+}
+
+void Popup::addToHistory(QString str) {
+    if (str.isEmpty()) return;
+    int idxA = -1;
+    int idxB = -1;
+    for (int i=0; i<count(); i++) {
+        QString str1 = item(i)->text();
+        if (str.startsWith(str1)) {
+            idxA = i;
+            break;
+        }
+        if (str1.startsWith(str)) {
+            idxB = i;
+            break;
+        }
+    }
+    if (idxA >= 0)
+        takeItem(idxA);
+    else if (idxB >= 0)
+        return;
+    else if (count()>=MAX_HISTORY)
+        takeItem(MAX_HISTORY-1);
+
+    assert(count()<MAX_HISTORY);
+    insertItem(0,str);
 }

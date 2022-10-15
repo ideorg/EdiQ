@@ -22,11 +22,13 @@ Q_OBJECT
     QPoint dragPos;
     int startWidth, startHeight;
     bool isDragPos(const QPoint &pos);
+    const int MAX_HISTORY = 40;
 public:
     explicit Popup(QWidget *parent);
     void popup(QPoint bottomLeft);
     QString selectedText;
     void select();
+    void addToHistory(QString str);
 signals:
     void selectSignal();
 protected:
