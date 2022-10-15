@@ -164,6 +164,7 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
 
 void CodeEditor::search(const QString &searchString) {
     if (searchString.isEmpty()) return;
+    bool modifiedBefore = plainEdit->document()->isModified();
     bool found = false;
     QTextCursor highlightCursor(plainEdit->document());
     QTextCursor cursor(plainEdit->document());
@@ -182,6 +183,7 @@ void CodeEditor::search(const QString &searchString) {
         }
     }
     cursor.endEditBlock();
+    plainEdit->document()->setModified(modifiedBefore);
 }
 
 void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {
