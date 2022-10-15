@@ -33,14 +33,17 @@ void MainWindow::createMenus() {
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 
     QAction *newAct = new QAction(tr("&New"), this);
+    newAct->setShortcut(QKeySequence("ctrl+n"));
     fileMenu->addAction(newAct);
     connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
 
     QAction *openAct = new QAction(tr("&Open..."), this);
+    openAct->setShortcut(QKeySequence("ctrl+o"));
     fileMenu->addAction(openAct);
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
 
     QAction *saveAct = new QAction(tr("&Save"), this);
+    saveAct->setShortcut(QKeySequence("ctrl+s"));
     fileMenu->addAction(saveAct);
     connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
 
@@ -49,10 +52,12 @@ void MainWindow::createMenus() {
     connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAsFile);
 
     QAction *closeAct = new QAction(tr("&Close"), this);
+    closeAct->setShortcut(QKeySequence("ctrl+F4"));
     fileMenu->addAction(closeAct);
     connect(closeAct, &QAction::triggered, this, &MainWindow::closeFile);
 
     QAction *closeAllAct = new QAction(tr("clos&E all"), this);
+    closeAct->setShortcut(QKeySequence("shift+ctrl+F4"));
     fileMenu->addAction(closeAllAct);
     connect(closeAllAct, &QAction::triggered, this, &MainWindow::closeAllFile);
 
