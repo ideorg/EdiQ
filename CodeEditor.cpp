@@ -162,24 +162,27 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
     highlightCurrentLine();
 }
 
-int CodeEditor::search(const QString &searchString, QTextDocument::FindFlag findFlag, bool isRegExp) {
+std::pair<int,int> CodeEditor::search(const QString &searchString, QTextDocument::FindFlag findFlag, bool isRegExp) {
     bool modifiedBefore = plainEdit->document()->isModified();
+    QRegExp regExp(searchString);
+    QTextCursor selCursor;
+    selCursor = plainEdit->textCursor();
     QTextCursor cursor(plainEdit->document());
     cursor.select(QTextCursor::Document);
     cursor.setCharFormat(QTextCharFormat());
     cursor.clearSelection();
     if (searchString.isEmpty()) {
         plainEdit->document()->setModified(modifiedBefore);
-        return 0;
+        return std::make_pair(0,0);
     }
-    int n  = 0;
-    QRegExp regExp(searchString);
+    std::pair<int,int> p;
     bool found = false;
     QTextCursor highlightCursor(plainEdit->document());
     cursor.beginEditBlock();
     QTextCharFormat plainFormat(highlightCursor.charFormat());
     QTextCharFormat colorFormat = plainFormat;
     colorFormat.setBackground(Qt::yellow);
+    bool setSelected = false;
     while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
         if (isRegExp)
             highlightCursor = plainEdit->document()->find(regExp, highlightCursor,findFlag);
@@ -187,13 +190,23 @@ int CodeEditor::search(const QString &searchString, QTextDocument::FindFlag find
             highlightCursor = plainEdit->document()->find(searchString, highlightCursor,findFlag);
         if (!highlightCursor.isNull()) {
             found = true;
-            n++;
+            p.second++;
             highlightCursor.mergeCharFormat(colorFormat);
+            if (highlightCursor.anchor()<selCursor.anchor())
+                p.first++;
+            else if (!setSelected){
+                selCursor.setPosition(highlightCursor.anchor());
+                selCursor.setPosition(highlightCursor.position(), QTextCursor::KeepAnchor);
+                setSelected = true;
+            }
         }
     }
     cursor.endEditBlock();
+    if (!selCursor.isNull()) {
+        plainEdit->setTextCursor(selCursor);
+    }
     plainEdit->document()->setModified(modifiedBefore);
-    return n;
+    return p;
 }
 
 void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {

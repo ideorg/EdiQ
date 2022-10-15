@@ -94,9 +94,9 @@ void SearchBar::search() {
         flags |= QTextDocument::FindCaseSensitively;
     if (wholeWordsButton->isChecked())
         flags |= QTextDocument::FindWholeWords;
-    int n = codeEditor->search(textToFind->text(), QTextDocument::FindFlag(flags), regExpButton->isChecked());
-    if (n==1)
-        resultsCount->setText("1 result");
+    auto p = codeEditor->search(textToFind->text(), QTextDocument::FindFlag(flags), regExpButton->isChecked());
+    if (p.second==0)
+        resultsCount->setText("0 results");
     else
-        resultsCount->setText(QString::number(n)+" results");
+        resultsCount->setText(QString::number(p.first+1)+"/"+QString::number(p.second));
 }
