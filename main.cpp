@@ -34,7 +34,8 @@ int main(int argc, char *argv[])
         );
         for (int i=1; i<app.arguments().size(); i++)
             mainWindow.openOrActivate(app.arguments()[i]);
-        mainWindow.resize(int(screenGeometry.width()*0.8), int(screenGeometry.height()*0.8));
+        mainWindow.setGeometry(int(screenGeometry.width()*0.1), int(screenGeometry.height()*0.1),
+                int(screenGeometry.width()*0.8), int(screenGeometry.height()*0.8));
         mainWindow.show();
         return app.exec();
     }
