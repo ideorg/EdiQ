@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete editorFactory;
+    delete (EditorFactory*)editorFactory;
 }
 
 void MainWindow::createMenus() {
