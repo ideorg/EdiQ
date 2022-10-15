@@ -60,7 +60,7 @@ void MainWindow::createMenus() {
     connect(closeAct, &QAction::triggered, this, &MainWindow::closeFile);
 
     QAction *closeAllAct = new QAction(tr("clos&E all"), this);
-    closeAct->setShortcut(QKeySequence("shift+ctrl+F4"));
+    closeAllAct->setShortcut(QKeySequence("shift+ctrl+F4"));
     fileMenu->addAction(closeAllAct);
     connect(closeAllAct, &QAction::triggered, this, &MainWindow::closeAllFile);
 
