@@ -265,7 +265,7 @@ int CodeEditor::sidebarWidth() const
 
 void CodeEditor::highlightCurrentLine() {
     QTextEdit::ExtraSelection selection;
-    selection.format.setBackground(Qt::cyan);
+    selection.format.setBackground(QColor(252,250,237));
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
     selection.cursor = plainEdit->textCursor();
     selection.cursor.clearSelection();
