@@ -28,6 +28,7 @@ class SearchBar : public QWidget {
     QLabel *resultsCount;
     QToolButton *caseSensitiveButton;
     QToolButton *wholeWordsButton;
+    QToolButton *regExpButton;
     void search();
 public:
     explicit SearchBar(CodeEditor *editor);

@@ -162,7 +162,7 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
     highlightCurrentLine();
 }
 
-int CodeEditor::search(const QString &searchString, QTextDocument::FindFlag findFlag) {
+int CodeEditor::search(const QString &searchString, QTextDocument::FindFlag findFlag, bool isRegExp) {
     bool modifiedBefore = plainEdit->document()->isModified();
     QTextCursor cursor(plainEdit->document());
     cursor.select(QTextCursor::Document);
@@ -173,6 +173,7 @@ int CodeEditor::search(const QString &searchString, QTextDocument::FindFlag find
         return 0;
     }
     int n  = 0;
+    QRegExp regExp(searchString);
     bool found = false;
     QTextCursor highlightCursor(plainEdit->document());
     cursor.beginEditBlock();
@@ -180,7 +181,10 @@ int CodeEditor::search(const QString &searchString, QTextDocument::FindFlag find
     QTextCharFormat colorFormat = plainFormat;
     colorFormat.setBackground(Qt::yellow);
     while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
-        highlightCursor = plainEdit->document()->find(searchString, highlightCursor,findFlag);
+        if (isRegExp)
+            highlightCursor = plainEdit->document()->find(regExp, highlightCursor,findFlag);
+        else
+            highlightCursor = plainEdit->document()->find(searchString, highlightCursor,findFlag);
         if (!highlightCursor.isNull()) {
             found = true;
             n++;

@@ -28,6 +28,7 @@ SearchBar::SearchBar(CodeEditor *editor)
     connect(textToFind, &QLineEdit::textChanged, this, &SearchBar::search);
     connect(caseSensitiveButton, &QToolButton::clicked, this, &SearchBar::search);
     connect(wholeWordsButton, &QToolButton::clicked, this, &SearchBar::search);
+    connect(regExpButton, &QToolButton::clicked, this, &SearchBar::search);
     qApp->installEventFilter(this);
 }
 
@@ -51,10 +52,10 @@ void SearchBar::addControls() {
     wholeWordsButton->setCheckable(true);
     wholeWordsButton->setText("W");
     toolBar1->addWidget(wholeWordsButton);
-    auto *btn3 = new QToolButton(toolBar1);
-    btn3->setCheckable(true);
-    btn3->setText(".*");
-    toolBar1->addWidget(btn3);
+    regExpButton = new QToolButton(toolBar1);
+    regExpButton->setCheckable(true);
+    regExpButton->setText(".*");
+    toolBar1->addWidget(regExpButton);
     hLayout->addWidget(toolBar1);
     resultsCount = new QLabel(this);
     resultsCount->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -86,7 +87,7 @@ void SearchBar::search() {
         flags |= QTextDocument::FindCaseSensitively;
     if (wholeWordsButton->isChecked())
         flags |= QTextDocument::FindWholeWords;
-    int n = codeEditor->search(textToFind->text(), QTextDocument::FindFlag(flags));
+    int n = codeEditor->search(textToFind->text(), QTextDocument::FindFlag(flags), regExpButton->isChecked());
     if (n==1)
         resultsCount->setText("1 result");
     else
