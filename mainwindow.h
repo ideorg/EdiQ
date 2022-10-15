@@ -32,5 +32,8 @@ private:
     void saveAsFile();
     void closeFile();
     void closeAllFile();
+    void findSearch();
+    void findNextSearch();
+    void findPreviousSearch();
 };
 #endif // MAINWINDOW_H

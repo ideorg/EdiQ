@@ -53,6 +53,19 @@ void MainWindow::createMenus() {
     QAction *closeAllAct = new QAction(tr("clos&E all"), this);
     fileMenu->addAction(closeAllAct);
     connect(closeAllAct, &QAction::triggered, this, &MainWindow::closeAllFile);
+
+    QMenu *searchMenu = menuBar()->addMenu(tr("&Search"));
+    QAction *findAct = new QAction(tr("&Find..."), this);
+    searchMenu->addAction(findAct);
+    connect(findAct, &QAction::triggered, this, &MainWindow::findSearch);
+
+    QAction *findNextAct = new QAction(tr("find &Next"), this);
+    searchMenu->addAction(findNextAct);
+    connect(findNextAct, &QAction::triggered, this, &MainWindow::findNextSearch);
+
+    QAction *findPreviousAct = new QAction(tr("find &Previous"), this);
+    searchMenu->addAction(findPreviousAct);
+    connect(findPreviousAct, &QAction::triggered, this, &MainWindow::findPreviousSearch);
 }
 
 void MainWindow::newFile() {
@@ -94,4 +107,16 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         event->accept();
     else
         event->ignore();
+}
+
+void MainWindow::findSearch() {
+
+}
+
+void MainWindow::findNextSearch() {
+
+}
+
+void MainWindow::findPreviousSearch() {
+
 }
