@@ -32,7 +32,6 @@ class SearchBar : public QWidget {
     void addControls();
     Popup *popup;
     QPushButton *button;
-    QLineEdit *textToFind;
     QLabel *resultsCount;
     QToolButton *eraseSearchButton;
     QToolButton *caseSensitiveButton;
@@ -42,6 +41,7 @@ class SearchBar : public QWidget {
 public:
     explicit SearchBar(CodeEditor *editor);
     SearchState searchState;
+    QLineEdit *textToFind;
 };
 
 

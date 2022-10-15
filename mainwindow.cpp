@@ -56,14 +56,17 @@ void MainWindow::createMenus() {
 
     QMenu *searchMenu = menuBar()->addMenu(tr("&Search"));
     QAction *findAct = new QAction(tr("&Find..."), this);
+    findAct->setShortcut(QKeySequence("ctrl+f"));
     searchMenu->addAction(findAct);
     connect(findAct, &QAction::triggered, this, &MainWindow::findSearch);
 
     QAction *findNextAct = new QAction(tr("find &Next"), this);
+    findNextAct->setShortcut(QKeySequence("f3"));
     searchMenu->addAction(findNextAct);
     connect(findNextAct, &QAction::triggered, this, &MainWindow::findNextSearch);
 
     QAction *findPreviousAct = new QAction(tr("find &Previous"), this);
+    findPreviousAct->setShortcut(QKeySequence("shift+f3"));
     searchMenu->addAction(findPreviousAct);
     connect(findPreviousAct, &QAction::triggered, this, &MainWindow::findPreviousSearch);
 }

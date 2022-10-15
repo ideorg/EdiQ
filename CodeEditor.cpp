@@ -22,6 +22,7 @@
 #include <QActionGroup>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QLineEdit>
 
 void CodeEditor::openFile() {
     QFile f(path);
@@ -431,7 +432,19 @@ void CodeEditor::find() {
 }
 
 void CodeEditor::findNext() {
-
+    bool modifiedBefore = plainEdit->document()->isModified();
+    const QString searchString = searchBar->textToFind->text();
+    QRegExp regExp(searchString);
+    QTextCursor selCursor;
+    selCursor = plainEdit->textCursor();
+    if (searchBar->searchState.isRegExp)
+        selCursor = plainEdit->document()->find(regExp, selCursor,searchBar->searchState.findFlag);
+    else
+        selCursor = plainEdit->document()->find(searchString, selCursor,searchBar->searchState.findFlag);
+    if (!selCursor.isNull()) {
+        plainEdit->setTextCursor(selCursor);
+    }
+    plainEdit->document()->setModified(modifiedBefore);
 }
 
 void CodeEditor::findPrevious() {
