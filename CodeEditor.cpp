@@ -163,11 +163,17 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
 }
 
 void CodeEditor::search(const QString &searchString) {
-    if (searchString.isEmpty()) return;
     bool modifiedBefore = plainEdit->document()->isModified();
+    QTextCursor cursor(plainEdit->document());
+    cursor.select(QTextCursor::Document);
+    cursor.setCharFormat(QTextCharFormat());
+    cursor.clearSelection();
+    if (searchString.isEmpty()) {
+        plainEdit->document()->setModified(modifiedBefore);
+        return;
+    }
     bool found = false;
     QTextCursor highlightCursor(plainEdit->document());
-    QTextCursor cursor(plainEdit->document());
     cursor.beginEditBlock();
     QTextCharFormat plainFormat(highlightCursor.charFormat());
     QTextCharFormat colorFormat = plainFormat;
