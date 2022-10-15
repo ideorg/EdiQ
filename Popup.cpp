@@ -15,12 +15,14 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
-Popup::Popup(QWidget *parent) : QListWidget(parent),parent(parent) {
+int select();
+
+Popup::Popup(QWidget *parent) : QListWidget(parent), parent(parent) {
     leftButtonPressed = false;
-    for (int i=0; i<20; i++) {
-        addItem("aaa");
-        addItem("vvvv");
-        addItem("vvvv012323456789vvvv0123456789vvvv0123456789vvvv0123456789vvvv0123456789");
+    for (int i=0; i<2; i++) {
+        addItem("a");
+        addItem("e");
+        addItem("the");
     }
 }
 
@@ -30,9 +32,12 @@ bool Popup::eventFilter(QObject *obj, QEvent *e) {
         e->type() == QEvent::HoverMove ||
         e->type() == QEvent::Leave ||
         e->type() == QEvent::MouseButtonPress ||
+        e->type() == QEvent::MouseButtonDblClick ||
         e->type() == QEvent::MouseButtonRelease) {
-
         switch (e->type()) {
+            case QEvent::MouseButtonDblClick:
+                select();
+                return false;
             case QEvent::MouseMove:
                 return mouseMove(static_cast<QMouseEvent*>(e));
                 break;
@@ -50,6 +55,13 @@ bool Popup::eventFilter(QObject *obj, QEvent *e) {
             default: return false;
         }
     }
+    else if (e->type() == QEvent::KeyPress) {
+        auto keyEvent = static_cast<QKeyEvent *>(e);
+        if (keyEvent->key()==Qt::Key_Enter) {
+            select();
+        }
+        return false;
+    }
     else {
         if (e->type() == QEvent::FocusIn)
             focusChanged(true);
@@ -57,6 +69,12 @@ bool Popup::eventFilter(QObject *obj, QEvent *e) {
             focusChanged(false);
         return false;
     }
+}
+
+void Popup::select() {
+    selectedText = selectedItems()[0]->text();
+    hide();
+    emit selectSignal();
 }
 
 void Popup::focusChanged(bool in) {

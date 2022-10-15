@@ -25,6 +25,16 @@ SearchBar::SearchBar(CodeEditor *editor)
     popup = new Popup(editor);
     popup->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint
         );
+    connect(button,&QPushButton::clicked,[=](){
+        QPoint bottomLeft = mapToGlobal(button->geometry().bottomLeft());
+        popup->popup(bottomLeft);
+    });
+    connect(popup,&Popup::selectSignal,[=](){
+        if (!popup->selectedText.isEmpty()) {
+            textToFind->setText(popup->selectedText);
+            search();
+        }
+    });
     connect(textToFind, &QLineEdit::textChanged, this, &SearchBar::search);
     connect(eraseSearchButton, &QToolButton::clicked, [=](){
         textToFind->setText("");

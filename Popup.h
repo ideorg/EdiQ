@@ -13,6 +13,7 @@
 #include <QListWidget>
 
 class Popup : public QListWidget {
+Q_OBJECT
     QWidget *parent;
     void installFilter();
     int outFocusCounter = 0;
@@ -24,6 +25,10 @@ class Popup : public QListWidget {
 public:
     explicit Popup(QWidget *parent);
     void popup(QPoint bottomLeft);
+    QString selectedText;
+    void select();
+signals:
+    void selectSignal();
 protected:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
     void focusChanged(bool in);
