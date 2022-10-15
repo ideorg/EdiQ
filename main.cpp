@@ -26,13 +26,13 @@ int main(int argc, char *argv[])
         return 0;
     } else {
         MainWindow mainWindow;
-        /*QObject::connect(
+        QObject::connect(
                 &app,
                 &SingleApplication::receivedMessage,
                 &mainWindow,
                 &MainWindow::receivedMessage
         );
-        for (int i=1; i<app.arguments().size(); i++)
+        /*for (int i=1; i<app.arguments().size(); i++)
             mainWindow.openOrActivate(app.arguments()[i]);*/
         mainWindow.resize(int(screenGeometry.width()*0.8), int(screenGeometry.height()*0.8));
         mainWindow.show();

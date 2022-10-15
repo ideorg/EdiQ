@@ -19,6 +19,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void receivedMessage(int instanceId, QByteArray message);
 protected:
     void closeEvent(QCloseEvent *event) override;
 private:

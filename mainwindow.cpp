@@ -13,6 +13,7 @@
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QCloseEvent>
+#include "raise.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -128,4 +129,12 @@ void MainWindow::findPreviousSearch() {
     IEditor *editor = editorFactory->getCurrentEditor();
     if (!editor) return;
     editor->findPrevious();
+}
+
+void MainWindow::receivedMessage(int instanceId, QByteArray message) {
+    QString argLine = QString(message);
+    QStringList args = argLine.split(' ');
+/*    for (int i=1; i<args.size(); i++)
+        openOrActivate(args[i]);*/
+    raiseThis();
 }

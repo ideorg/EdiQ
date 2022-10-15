@@ -33,7 +33,8 @@ set(PROJECT_SOURCES
         CodeEditorSidebar.cpp CodeEditorSidebar.h
         PlainTextEdit.h
         SearchBar.cpp SearchBar.h
-        Popup.cpp Popup.h)
+        Popup.cpp Popup.h
+        raise.cpp raise.h XRaise.cpp XRaise.h)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
@@ -66,6 +67,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
         SingleApplication::SingleApplication
         KF5SyntaxHighlighting
+        X11
         )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
