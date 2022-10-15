@@ -33,6 +33,7 @@ SearchBar::SearchBar(CodeEditor *editor)
     connect(caseSensitiveButton, &QToolButton::clicked, this, &SearchBar::search);
     connect(wholeWordsButton, &QToolButton::clicked, this, &SearchBar::search);
     connect(regExpButton, &QToolButton::clicked, this, &SearchBar::search);
+    connect(closeButton, &QToolButton::clicked, this, &SearchBar::closeSearch);
     qApp->installEventFilter(this);
 }
 
@@ -82,9 +83,9 @@ void SearchBar::addControls() {
     hLayout->addWidget(toolBar2);
     auto *toolBar3 = new QToolBar(this);
     hLayout->addWidget(toolBar3);
-    auto *btn7 = new QToolButton(toolBar3);
-    toolBar3->addWidget(btn7);
-    btn7->setText("x");
+    closeButton = new QToolButton(toolBar3);
+    toolBar3->addWidget(closeButton);
+    closeButton->setText("x");
     setLayout(hLayout);
 }
 
@@ -102,4 +103,8 @@ void SearchBar::search() {
     else
         resultsCount->setText(QString::number(searchState.currResult+1)+"/"
                         +QString::number(searchState.resCount));
+}
+
+void SearchBar::closeSearch() {
+    hide();
 }
