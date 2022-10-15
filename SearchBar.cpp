@@ -37,6 +37,14 @@ SearchBar::SearchBar(CodeEditor *editor)
     qApp->installEventFilter(this);
 }
 
+void SearchBar::keyPressEvent(QKeyEvent *event)
+{
+    if( event->key() == Qt::Key_Escape )
+    {
+        closeSearch();
+    }
+}
+
 void SearchBar::addControls() {
     auto *hLayout = new QHBoxLayout;
     hLayout->setMargin(0);

@@ -39,6 +39,8 @@ class SearchBar : public QWidget {
     QToolButton *regExpButton;
     QToolButton *closeButton;
     void closeSearch();
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 public:
     explicit SearchBar(CodeEditor *editor);
     SearchState searchState;
