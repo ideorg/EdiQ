@@ -20,6 +20,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void receivedMessage(int instanceId, QByteArray message);
+    void openOrActivate(QString path);
 protected:
     void closeEvent(QCloseEvent *event) override;
 private:

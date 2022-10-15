@@ -69,3 +69,12 @@ bool EditorFactory::tryCloseAll() {
         if (!tryCloseEditor(tabWidget->currentIndex(), canClose)) return false;
     return true;
 }
+
+IEditor *EditorFactory::getEditorByPath(const QString &path) {
+    for (int i=0; i<tabWidget->count(); i++) {
+        auto* editor = dynamic_cast<IEditor *>(tabWidget->widget(i));
+        if (editor->getPath()==path)
+            return editor;
+    }
+    return nullptr;
+}

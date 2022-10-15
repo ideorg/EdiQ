@@ -58,6 +58,7 @@ public:
     bool save() override;
     bool saveAs() override;
     ConsiderEnum consider() override;
+    QString getPath() override;
     void askSaveChangesBeforeClosing(CloseEnum &canClose) override;
     void find() override;
     void findNext() override;

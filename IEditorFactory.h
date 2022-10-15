@@ -18,6 +18,7 @@ public:
     virtual int getEditorCount() = 0;
     virtual IEditor *getEditor(int index) = 0;
     virtual IEditor *getCurrentEditor() = 0;
+    virtual IEditor *getEditorByPath(const QString &path) = 0;
     virtual bool tryCloseEditor(int index, IEditor::CloseEnum &canClose) = 0;
     virtual bool tryCloseCurrentEditor() = 0;
     virtual bool tryCloseAll() = 0;

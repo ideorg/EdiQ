@@ -17,6 +17,7 @@ class IEditor {
 public:
     enum ConsiderEnum {coCanClose, coCanSave, coSaveAs};
     enum CloseEnum {clClose, clCloseAllSave, clCloseAllDiscard, clNo, clCancel, clError};
+    virtual QString getPath() = 0;
     virtual QString getTitle() = 0;
     virtual bool isModified() = 0;
     virtual bool isEmpty() = 0;

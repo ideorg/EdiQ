@@ -24,6 +24,7 @@ public:
     int getEditorCount() override;
     IEditor *getEditor(int index) override;
     IEditor *getCurrentEditor() override;
+    IEditor *getEditorByPath(const QString &path) override;
     bool tryCloseEditor(int index, IEditor::CloseEnum &canClose) override;
     bool tryCloseCurrentEditor() override;
     bool tryCloseAll() override;

@@ -462,3 +462,7 @@ void CodeEditor::findNext() {
 void CodeEditor::findPrevious() {
     findNextPrevious(true);
 }
+
+QString CodeEditor::getPath() {
+    return path;
+}

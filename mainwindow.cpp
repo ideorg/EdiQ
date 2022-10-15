@@ -14,6 +14,7 @@
 #include <QFileDialog>
 #include <QCloseEvent>
 #include "raise.h"
+#include "CodeEditor.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -76,13 +77,34 @@ void MainWindow::newFile() {
     IEditor *newEditor = editorFactory->createEditorTab("");
 }
 
+void MainWindow::openOrActivate(QString path) {
+    CodeEditor *editor = (CodeEditor *)editorFactory->getEditorByPath(path);
+    if (editor) {
+        auto plainEdit = editor->plainEdit;
+        QTextCursor cursor = plainEdit->textCursor();
+        int position = cursor.position();
+        editor->openFile();
+        cursor.setPosition(position, QTextCursor::MoveAnchor);
+        plainEdit->setTextCursor(cursor);
+        editor->activateWindow();
+        plainEdit->document()->setModified(false);
+        //onTextChanged();
+    }
+    else {
+        editor = (CodeEditor *) editorFactory->createEditorTab(path);
+        editor->openFile();
+    }
+    tabWidget.setCurrentWidget(editor);
+    editor->setFocus();
+}
+
 void MainWindow::openFile()
 {
     QFileDialog dialog(this, tr("Open File"));
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
-        IEditor *newEditor = editorFactory->createEditorTab(dialog.selectedFiles().first());
-        newEditor->openFile();
+        QString path = dialog.selectedFiles().first();
+        openOrActivate(path);
     }
 }
 
@@ -134,7 +156,7 @@ void MainWindow::findPreviousSearch() {
 void MainWindow::receivedMessage(int instanceId, QByteArray message) {
     QString argLine = QString(message);
     QStringList args = argLine.split(' ');
-/*    for (int i=1; i<args.size(); i++)
-        openOrActivate(args[i]);*/
+    for (int i=1; i<args.size(); i++)
+        openOrActivate(args[i]);
     raiseThis();
 }
