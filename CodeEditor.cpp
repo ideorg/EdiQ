@@ -431,22 +431,29 @@ void CodeEditor::find() {
 
 }
 
-void CodeEditor::findNext() {
+void CodeEditor::findNextPrevious(bool previous) {
     bool modifiedBefore = plainEdit->document()->isModified();
     const QString searchString = searchBar->textToFind->text();
     QRegExp regExp(searchString);
     QTextCursor selCursor;
     selCursor = plainEdit->textCursor();
+    auto flags = searchBar->searchState.findFlag;
+    if (previous)
+        flags = QTextDocument::FindFlag((int)flags | QTextDocument::FindBackward);
     if (searchBar->searchState.isRegExp)
-        selCursor = plainEdit->document()->find(regExp, selCursor,searchBar->searchState.findFlag);
+        selCursor = plainEdit->document()->find(regExp, selCursor,flags);
     else
-        selCursor = plainEdit->document()->find(searchString, selCursor,searchBar->searchState.findFlag);
+        selCursor = plainEdit->document()->find(searchString, selCursor,flags);
     if (!selCursor.isNull()) {
         plainEdit->setTextCursor(selCursor);
     }
     plainEdit->document()->setModified(modifiedBefore);
 }
 
-void CodeEditor::findPrevious() {
+void CodeEditor::findNext() {
+    findNextPrevious(false);
+}
 
+void CodeEditor::findPrevious() {
+    findNextPrevious(true);
 }

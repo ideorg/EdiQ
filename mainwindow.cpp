@@ -123,5 +123,7 @@ void MainWindow::findNextSearch() {
 }
 
 void MainWindow::findPreviousSearch() {
-
+    IEditor *editor = editorFactory->getCurrentEditor();
+    if (!editor) return;
+    editor->findPrevious();
 }
