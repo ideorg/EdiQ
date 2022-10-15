@@ -15,9 +15,17 @@
 #include <QTimer>
 #include <QLabel>
 #include <QToolButton>
+#include <QTextDocument>
 #include "Popup.h"
 
 class CodeEditor;
+
+struct SearchState {
+    int currResult = 0;
+    int resCount = 0;
+    QTextDocument::FindFlag findFlag;
+    bool isRegExp;
+};
 
 class SearchBar : public QWidget {
     CodeEditor *codeEditor;

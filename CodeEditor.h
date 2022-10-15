@@ -31,6 +31,7 @@ class CodeEditor : public QWidget, public IEditor {
     bool saveFile();
     CodeEditorSidebar *sideBar;
     SearchBar *searchBar;
+    SearchState searchState;
     KSyntaxHighlighting::Repository repository;
     KSyntaxHighlighting::SyntaxHighlighter *highlighter;
     void updateSidebarGeometry();
@@ -59,6 +60,9 @@ public:
     bool saveAs() override;
     ConsiderEnum consider() override;
     void askSaveChangesBeforeClosing(CloseEnum &canClose) override;
+    void find() override;
+    void findNext() override;
+    void findPrevious() override;
 };
 
 

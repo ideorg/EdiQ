@@ -425,3 +425,15 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
     menu->exec(event->globalPos());
     delete menu;
 }
+
+void CodeEditor::find() {
+
+}
+
+void CodeEditor::findNext() {
+
+}
+
+void CodeEditor::findPrevious() {
+
+}
