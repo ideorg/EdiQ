@@ -26,6 +26,7 @@ class SearchBar : public QWidget {
     QPushButton *button;
     QLineEdit *textToFind;
     QLabel *resultsCount;
+    QToolButton *eraseSearchButton;
     QToolButton *caseSensitiveButton;
     QToolButton *wholeWordsButton;
     QToolButton *regExpButton;

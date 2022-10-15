@@ -26,6 +26,10 @@ SearchBar::SearchBar(CodeEditor *editor)
     popup->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint
         );
     connect(textToFind, &QLineEdit::textChanged, this, &SearchBar::search);
+    connect(eraseSearchButton, &QToolButton::clicked, [=](){
+        textToFind->setText("");
+        search();
+    });
     connect(caseSensitiveButton, &QToolButton::clicked, this, &SearchBar::search);
     connect(wholeWordsButton, &QToolButton::clicked, this, &SearchBar::search);
     connect(regExpButton, &QToolButton::clicked, this, &SearchBar::search);
@@ -44,6 +48,9 @@ void SearchBar::addControls() {
     textToFind = new QLineEdit(this);
     hLayout->addWidget(textToFind);
     auto *toolBar1 = new QToolBar(this);
+    eraseSearchButton = new QToolButton(toolBar1);
+    eraseSearchButton->setText("x");
+    toolBar1->addWidget(eraseSearchButton);
     caseSensitiveButton = new QToolButton(toolBar1);
     caseSensitiveButton->setCheckable(true);
     caseSensitiveButton->setText("Cc");
