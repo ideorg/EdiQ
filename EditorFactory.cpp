@@ -13,6 +13,7 @@
 
 IEditor *EditorFactory::createEditorTab(const QString& path) {
     auto *editor = new CodeEditor(path);
+    connect(editor->plainEdit, &PlainTextEdit::textChanged, this, &EditorFactory::onTextChanged);
     editor->untitledId = untitledCounter.getNextId();
     tabWidget->addTab(editor, editor->getTitle());
     return editor;
@@ -77,4 +78,12 @@ IEditor *EditorFactory::getEditorByPath(const QString &path) {
             return editor;
     }
     return nullptr;
+}
+
+void EditorFactory::onTextChanged() {
+    IEditor* editor = getCurrentEditor();
+    if (!editor) return;
+    bool modified = editor->isModified();
+    QColor color = modified? Qt::red : Qt::black;
+    tabWidget->tabBar()->setTabTextColor(tabWidget->currentIndex(),color);
 }

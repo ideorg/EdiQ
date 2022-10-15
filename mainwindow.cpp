@@ -88,11 +88,12 @@ void MainWindow::openOrActivate(QString path) {
         plainEdit->setTextCursor(cursor);
         editor->activateWindow();
         plainEdit->document()->setModified(false);
-        //onTextChanged();
+        editorFactory->onTextChanged();
     }
     else {
         editor = (CodeEditor *) editorFactory->createEditorTab(path);
         editor->openFile();
+        editorFactory->onTextChanged();
     }
     tabWidget.setCurrentWidget(editor);
     editor->setFocus();
@@ -112,12 +113,14 @@ void MainWindow::saveFile() {
     IEditor *editor = editorFactory->getCurrentEditor();
     if (!editor) return;
     editor->save();
+    editorFactory->onTextChanged();
 }
 
 void MainWindow::saveAsFile() {
     IEditor *editor = editorFactory->getCurrentEditor();
     if (!editor) return;
     editor->saveAs();
+    editorFactory->onTextChanged();
 }
 
 void MainWindow::closeFile() {

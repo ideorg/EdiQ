@@ -36,5 +36,6 @@ private:
     void findSearch();
     void findNextSearch();
     void findPreviousSearch();
+    void onTextChanged();
 };
 #endif // MAINWINDOW_H

@@ -15,7 +15,7 @@
 #include "IEditorFactory.h"
 #include "UntitledCounter.h"
 
-class EditorFactory : public IEditorFactory {
+class EditorFactory : public QObject, public IEditorFactory {
     QTabWidget *tabWidget;
     UntitledCounter untitledCounter;
 public:
@@ -28,6 +28,7 @@ public:
     bool tryCloseEditor(int index, IEditor::CloseEnum &canClose) override;
     bool tryCloseCurrentEditor() override;
     bool tryCloseAll() override;
+    void onTextChanged() override;
 private:
     void closeEditor(int index);
 };

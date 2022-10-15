@@ -44,6 +44,7 @@ bool CodeEditor::saveFile() {
         return false;
     }
     f.write(text.toUtf8());
+    plainEdit->document()->setModified(false);
     return true;
 }
 
