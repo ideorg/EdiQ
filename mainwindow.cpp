@@ -79,7 +79,8 @@ void MainWindow::createMenus() {
 }
 
 void MainWindow::newFile() {
-    IEditor *newEditor = editorFactory->createEditorTab("");
+    CodeEditor *editor = (CodeEditor *)editorFactory->createEditorTab("");
+    tabWidget.setCurrentWidget(editor);
 }
 
 void MainWindow::openOrActivate(QString path) {
