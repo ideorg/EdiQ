@@ -27,7 +27,7 @@ SearchBar::SearchBar(CodeEditor *editor)
     popup = new Popup(editor);
     popup->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint
         );
-    connect(button,&QPushButton::clicked,[=](){
+    connect(textToFind, &QLineEdit::textChanged, [=](){
         //QPoint bottomLeft = mapToGlobal(button->geometry().bottomLeft());
         //popup->popup(bottomLeft);
         search(textToFind->text());
