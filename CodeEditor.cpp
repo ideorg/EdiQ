@@ -171,12 +171,10 @@ void CodeEditor::search(const QString &searchString) {
     cursor.beginEditBlock();
     QTextCharFormat plainFormat(highlightCursor.charFormat());
     QTextCharFormat colorFormat = plainFormat;
-    colorFormat.setForeground(Qt::red);
     colorFormat.setBackground(Qt::yellow);
     while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
         highlightCursor = plainEdit->document()->find(searchString, highlightCursor,
                                          QTextDocument::FindFlag(0));
-
         if (!highlightCursor.isNull()) {
             found = true;
             highlightCursor.mergeCharFormat(colorFormat);
