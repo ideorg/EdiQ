@@ -37,5 +37,7 @@ private:
     void findNextSearch();
     void findPreviousSearch();
     void onTextChanged();
+    void activateTab(int index);
+    bool eventFilter(QObject *target, QEvent *event) override;
 };
 #endif // MAINWINDOW_H
