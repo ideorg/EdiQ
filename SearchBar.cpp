@@ -116,6 +116,7 @@ void SearchBar::search() {
     searchState.findFlag = QTextDocument::FindFlag(flags);
     searchState.isRegExp = regExpButton->isChecked();
     codeEditor->search(textToFind->text());
+    emit onTextChanged();
     if (searchState.resCount==0)
         resultsCount->setText("0 results");
     else
@@ -126,5 +127,7 @@ void SearchBar::search() {
 }
 
 void SearchBar::closeSearch() {
+    codeEditor->clearSearch();
     hide();
+    emit onTextChanged();
 }

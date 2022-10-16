@@ -28,6 +28,7 @@ struct SearchState {
 };
 
 class SearchBar : public QWidget {
+Q_OBJECT
     CodeEditor *codeEditor;
     void addControls();
     Popup *popup;
@@ -46,6 +47,8 @@ public:
     QLineEdit *textToFind;
     void search();
     void closeSearch();
+signals:
+    void onTextChanged();
 };
 
 

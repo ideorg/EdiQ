@@ -41,6 +41,7 @@ class CodeEditor : public QWidget, public IEditor {
 public:
     explicit CodeEditor(QString path);
     PlainTextEdit *plainEdit;
+    void clearSearch();
     void search(const QString &searchString);
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;

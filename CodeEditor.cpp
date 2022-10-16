@@ -182,21 +182,29 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
     highlightCurrentLine();
 }
 
+void CodeEditor::clearSearch() {
+    bool modifiedBefore = plainEdit->document()->isModified();
+    QTextCursor cursor(plainEdit->document());
+    cursor.select(QTextCursor::Document);
+    cursor.setCharFormat(QTextCharFormat());
+    cursor.clearSelection();
+    plainEdit->document()->setModified(modifiedBefore);
+}
+
 void CodeEditor::search(const QString &searchString) {
     bool modifiedBefore = plainEdit->document()->isModified();
     QRegExp regExp(searchString);
     QTextCursor selCursor;
     selCursor = plainEdit->textCursor();
-    QTextCursor cursor(plainEdit->document());
-    cursor.select(QTextCursor::Document);
-    cursor.setCharFormat(QTextCharFormat());
-    cursor.clearSelection();
+    clearSearch();
     if (searchString.isEmpty()) {
         plainEdit->document()->setModified(modifiedBefore);
         searchBar->searchState.resCount = searchBar->searchState.currResult = 0;
+        return;
     }
     bool found = false;
     QTextCursor highlightCursor(plainEdit->document());
+    QTextCursor cursor;
     cursor.beginEditBlock();
     QTextCharFormat plainFormat(highlightCursor.charFormat());
     QTextCharFormat colorFormat = plainFormat;

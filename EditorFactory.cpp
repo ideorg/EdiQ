@@ -14,6 +14,7 @@
 IEditor *EditorFactory::createEditorTab(const QString& path) {
     auto *editor = new CodeEditor(path);
     connect(editor->plainEdit, &PlainTextEdit::textChanged, this, &EditorFactory::onTextChanged);
+    connect(editor->searchBar, &SearchBar::onTextChanged, this, &EditorFactory::onTextChanged);
     editor->untitledId = untitledCounter.getNextId();
     tabWidget->addTab(editor, editor->getTitle());
     return editor;
