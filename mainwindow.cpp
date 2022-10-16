@@ -26,6 +26,10 @@ MainWindow::MainWindow(QWidget *parent)
     tabWidget.setTabPosition(QTabWidget::South);
     setCentralWidget(&tabWidget);
     editorFactory = new EditorFactory(&tabWidget);
+    connect(&tabWidget, &QTabWidget::tabCloseRequested, this, [this](int index) {
+        IEditor::CloseEnum canClose = IEditor::clClose;
+        editorFactory->tryCloseEditor(index, canClose);
+    });
     QGuiApplication::instance()->installEventFilter(this);
 }
 
