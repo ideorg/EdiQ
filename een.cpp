@@ -55,17 +55,19 @@ QByteArray encrypt(const QByteArray &bytes, std::string &password) {
     header.header_version = 1;
     header.padding = 0;
     unsigned char digest[32];
-    derive_key(password, digest, header, false);
-    int nblocks = (bytes.count()+31)/32;
-    auto* dataIn = new unsigned char[nblocks * 32];
-    auto* dataOut = new unsigned char[sizeof(EenHeader)+nblocks * 32];
-    memcpy(dataIn, bytes.data(), bytes.count());
-    memset(dataIn + bytes.count(), 0, nblocks * 32 - bytes.count());
-    memcpy(dataOut, &header, sizeof(header));
     Botan::AES_256 aes256;
+    int BSize= aes256.block_size();
+    derive_key(password, digest, header, false);
+    int nblocks = (bytes.count()+BSize-1)/BSize;
+    auto* dataIn = new unsigned char[nblocks * BSize];
+    auto* dataOut = new unsigned char[sizeof(EenHeader)+nblocks * BSize];
+    memcpy(dataIn, bytes.data(), bytes.count());
+    memset(dataIn + bytes.count(), 0, nblocks * BSize - bytes.count());
+    memcpy(dataOut, &header, sizeof(header));
+
     aes256.set_key(digest,32);
     aes256.encrypt_n(dataIn, dataOut+sizeof(header), nblocks);
-    QByteArray result((char*)dataOut, sizeof(EenHeader)+nblocks*32);
+    QByteArray result((char*)dataOut, sizeof(EenHeader)+nblocks*BSize);
     return result;
 }
 
@@ -76,11 +78,12 @@ QByteArray decrypt(const QByteArray &bytes, std::string &password) {
     if (!derive_key(password, digest, header, true)) {
         return {};
     }
-    int nblocks = (bytes.count()-sizeof(header)+31)/32;
-    auto* dataIn = new unsigned char[nblocks * 32];
-    auto* dataOut = new unsigned char[nblocks * 32];
-    memcpy(dataIn, bytes.data()+sizeof(header), bytes.count()-sizeof(header));
     Botan::AES_256 aes256;
+    int BSize= aes256.block_size();
+    int nblocks = (bytes.count()-sizeof(header)+BSize-1)/BSize;
+    auto* dataIn = new unsigned char[nblocks * BSize];
+    auto* dataOut = new unsigned char[nblocks * BSize];
+    memcpy(dataIn, bytes.data()+sizeof(header), bytes.count()-sizeof(header));
     aes256.set_key(digest,32);
     aes256.decrypt_n(dataIn, dataOut, nblocks);
     QByteArray result((char*)dataOut, header.data_size);
