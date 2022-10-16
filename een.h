@@ -10,4 +10,7 @@
 QByteArray encrypt(const QByteArray &bytes, std::string &password);
 QByteArray decrypt(const QByteArray &bytes, std::string &password);
 
+std::string setPassword();
+std::string getPassword();
+
 #endif //EDIQ_EEN_H

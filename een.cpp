@@ -5,7 +5,8 @@
 #include <botan/aes.h>
 #include <botan/sha3.h>
 #include <botan/argon2.h>
-
+#include <QInputDialog>
+#include <QMessageBox>
 
 #pragma pack(push)
 #pragma pack(1)
@@ -84,4 +85,58 @@ QByteArray decrypt(const QByteArray &bytes, std::string &password) {
     aes256.decrypt_n(dataIn, dataOut, nblocks);
     QByteArray result((char*)dataOut, header.data_size);
     return result;
+}
+
+static bool isAlnum(const QChar c) {
+    return c>='A' && c<='Z' ||
+            c>='a' && c<='z' ||
+            c>='0' && c<='9';
+}
+
+static bool isAlnum(const QString &pass) {
+    for (auto c:pass) {
+        if (!isAlnum(c))
+            return false;
+    }
+    return true;
+}
+
+std::string setPassword() {
+    bool ok;
+    QString text = QInputDialog::getText(nullptr, "Set password:",
+                                         "Password:", QLineEdit::Password,
+                                         "", &ok);
+    if (!ok) {
+        QMessageBox msgBox;
+        msgBox.setText("Password not set");
+        msgBox.exec();
+        return "";
+    }
+    if (!isAlnum(text)) {
+        QMessageBox msgBox;
+        msgBox.setText("Password must contain only Ascii letters and digits");
+        msgBox.exec();
+        return "";
+    }
+    QString text1 = QInputDialog::getText(nullptr, "Repeat password:",
+                                         "Password:", QLineEdit::Password,
+                                         "", &ok);
+    if (text1!=text) {
+        QMessageBox msgBox;
+        msgBox.setText("Two password inputs mismatch");
+        msgBox.exec();
+        return "";
+    }
+    return text.toUtf8().constData();
+}
+
+std::string getPassword() {
+    bool ok;
+    QString text = QInputDialog::getText(nullptr, "Get password:",
+                                         "Password:", QLineEdit::Password,
+                                         "", &ok);
+    if (ok)
+        return text.toUtf8().constData();
+    else
+        return "";
 }

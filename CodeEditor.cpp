@@ -26,6 +26,9 @@
 #include <QLineEdit>
 
 void CodeEditor::openFile() {
+    if (path.endsWith(".een")) {
+        eenPassword = getPassword();
+    }
     QFile f(path);
     if (!f.open(QFile::ReadOnly)) {
         qWarning() << "Failed to open" << path << ":" << f.errorString();
@@ -42,6 +45,11 @@ void CodeEditor::openFile() {
 
 bool CodeEditor::saveFile() {
     assert(!path.isEmpty());
+    if (path.endsWith(".een") && eenPassword.empty()) {
+        eenPassword = setPassword();
+        if (eenPassword.empty())
+            return false;
+    }
     QString text = plainEdit->toPlainText();
     bool isEen = path.endsWith(".een");
     QFile f(path);
