@@ -111,7 +111,7 @@ void MainWindow::openOrActivate(QString path) {
         editorFactory->onTextChanged();
     }
     tabWidget.setCurrentWidget(editor);
-    editor->setFocus();
+    editor->setPlainFocus();
 }
 
 void MainWindow::openFile()
