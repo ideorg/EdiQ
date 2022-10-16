@@ -200,6 +200,7 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event) {
             IEditor* editor = editorFactory->getCurrentEditor();
             if (editor)
                 editor->setPlainFocus();
+            return true;
         }
     }
     return QObject::eventFilter(target, event);

@@ -486,5 +486,6 @@ QString CodeEditor::getPath() {
 }
 
 void CodeEditor::setPlainFocus() {
+    searchBar->closeSearch();
     plainEdit->setFocus();
 }

@@ -38,7 +38,6 @@ class SearchBar : public QWidget {
     QToolButton *wholeWordsButton;
     QToolButton *regExpButton;
     QToolButton *closeButton;
-    void closeSearch();
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 public:
@@ -46,6 +45,7 @@ public:
     SearchState searchState;
     QLineEdit *textToFind;
     void search();
+    void closeSearch();
 };
 
 
