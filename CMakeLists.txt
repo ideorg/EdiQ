@@ -34,7 +34,8 @@ set(PROJECT_SOURCES
         PlainTextEdit.h
         SearchBar.cpp SearchBar.h
         Popup.cpp Popup.h
-        raise.cpp raise.h XRaise.cpp XRaise.h)
+        raise.cpp raise.h XRaise.cpp XRaise.h
+        een.cpp een.h)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
@@ -62,12 +63,13 @@ else()
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-        /usr/include/KF5/KSyntaxHighlighting)
+        /usr/include/KF5/KSyntaxHighlighting
+        /usr/include/botan-2)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
         SingleApplication::SingleApplication
         KF5SyntaxHighlighting
-        X11
+        X11 botan-2
         )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

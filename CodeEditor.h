@@ -27,6 +27,7 @@ namespace KSyntaxHighlighting
 
 class CodeEditor : public QWidget, public IEditor {
     QString path;
+    std::string eenPassword;
     int untitledId = 0;
     bool saveFile();
     CodeEditorSidebar *sideBar;

@@ -8,6 +8,7 @@
 ****************************************************************************/
 
 #include "CodeEditor.h"
+#include "een.h"
 #include <definition.h>
 #include <syntaxhighlighter.h>
 #include <theme.h>
@@ -32,18 +33,26 @@ void CodeEditor::openFile() {
     }
     const auto def = repository.definitionForFileName(path);
     highlighter->setDefinition(def);
-    plainEdit->setPlainText(QString::fromUtf8(f.readAll()));
+    bool isEen = path.endsWith(".een");
+    QByteArray bytes = f.readAll();
+    if (isEen)
+        bytes = decrypt(bytes, eenPassword);
+    plainEdit->setPlainText(QString::fromUtf8(bytes));
 }
 
 bool CodeEditor::saveFile() {
     assert(!path.isEmpty());
     QString text = plainEdit->toPlainText();
+    bool isEen = path.endsWith(".een");
     QFile f(path);
     if (!f.open(QFile::WriteOnly)) {
         qWarning() << "Failed to open" << path << ":" << f.errorString();
         return false;
     }
-    f.write(text.toUtf8());
+    QByteArray bytes = text.toUtf8();
+    if (isEen)
+        bytes = encrypt(bytes, eenPassword);
+    f.write(bytes);
     plainEdit->document()->setModified(false);
     return true;
 }
