@@ -129,6 +129,7 @@ void MainWindow::saveAsFile() {
     IEditor *editor = editorFactory->getCurrentEditor();
     if (!editor) return;
     editor->saveAs();
+    tabWidget.setTabText(tabWidget.currentIndex(), editor->getTitle());
     editorFactory->onTextChanged();
 }
 
