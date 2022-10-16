@@ -24,6 +24,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLineEdit>
+#include <chrono>
 
 void CodeEditor::openFile() {
     if (path.endsWith(".een")) {
@@ -496,4 +497,44 @@ QString CodeEditor::getPath() {
 void CodeEditor::setPlainFocus() {
     searchBar->closeSearch();
     plainEdit->setFocus();
+}
+
+
+const static char* daysOfWeek[] = {
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+};
+
+void CodeEditor::insertDate() {
+    auto nowChrono = std::chrono::system_clock::now();
+    time_t now_time_t = std::chrono::system_clock::to_time_t(nowChrono);
+    struct tm* now_tm = localtime(&now_time_t);
+    char buf[64];
+    sprintf(buf,"%s %d-%.2d-%.2d",
+            daysOfWeek[now_tm->tm_wday],
+            now_tm->tm_year+1900, now_tm->tm_mon+1, now_tm->tm_mday);
+    QString str = buf;
+    plainEdit->insertPlainText(str);
+}
+
+void CodeEditor::insertTime() {
+    auto nowChrono = std::chrono::system_clock::now();
+    time_t now_time_t = std::chrono::system_clock::to_time_t(nowChrono);
+    struct tm* now_tm = localtime(&now_time_t);
+    char buf[64];
+    sprintf(buf,"%.2d:%.2d:%.2d",
+            now_tm->tm_hour, now_tm->tm_min, now_tm->tm_sec);
+    QString str = buf;
+    plainEdit->insertPlainText(str);
+}
+
+void CodeEditor::insertBoth() {
+    insertDate();
+    plainEdit->insertPlainText(" ");
+    insertTime();
 }

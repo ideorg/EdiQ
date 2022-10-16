@@ -67,6 +67,9 @@ public:
     void findPrevious() override;
     void setPlainFocus() override;
     void findNextPrevious(bool previous);
+    void insertDate() override;
+    void insertTime() override;
+    void insertBoth() override;
 };
 
 

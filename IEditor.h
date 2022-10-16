@@ -31,6 +31,9 @@ public:
     virtual void findNext()  = 0;
     virtual void findPrevious()  = 0;
     virtual void setPlainFocus()  = 0;
+    virtual void insertDate()  = 0;
+    virtual void insertTime()  = 0;
+    virtual void insertBoth()  = 0;
 };
 
 

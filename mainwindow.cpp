@@ -85,6 +85,19 @@ void MainWindow::createMenus() {
     findPreviousAct->setShortcut(QKeySequence("shift+f3"));
     searchMenu->addAction(findPreviousAct);
     connect(findPreviousAct, &QAction::triggered, this, &MainWindow::findPreviousSearch);
+
+    QMenu *toolsMenu = menuBar()->addMenu(tr("&Tools"));
+    QAction *insertDateAct = new QAction(tr("insert &Date"), this);
+    toolsMenu->addAction(insertDateAct);
+    connect(insertDateAct, &QAction::triggered, this, &MainWindow::insertDate);
+
+    QAction *insertTimeAct = new QAction(tr("insert &Time"), this);
+    toolsMenu->addAction(insertTimeAct);
+    connect(insertTimeAct, &QAction::triggered, this, &MainWindow::insertTime);
+
+    QAction *insertBothAct = new QAction(tr("insert &Both date and time"), this);
+    toolsMenu->addAction(insertBothAct);
+    connect(insertBothAct, &QAction::triggered, this, &MainWindow::insertBoth);
 }
 
 void MainWindow::newFile() {
@@ -204,4 +217,22 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event) {
         }
     }
     return QObject::eventFilter(target, event);
+}
+
+void MainWindow::insertDate() {
+    IEditor *editor = editorFactory->getCurrentEditor();
+    if (!editor) return;
+    editor->insertDate();
+}
+
+void MainWindow::insertTime() {
+    IEditor *editor = editorFactory->getCurrentEditor();
+    if (!editor) return;
+    editor->insertTime();
+}
+
+void MainWindow::insertBoth() {
+    IEditor *editor = editorFactory->getCurrentEditor();
+    if (!editor) return;
+    editor->insertBoth();
 }

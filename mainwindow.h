@@ -39,5 +39,8 @@ private:
     void onTextChanged();
     void activateTab(int index);
     bool eventFilter(QObject *target, QEvent *event) override;
+    void insertDate();
+    void insertTime();
+    void insertBoth();
 };
 #endif // MAINWINDOW_H
