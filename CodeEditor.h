@@ -64,6 +64,7 @@ public:
     void find() override;
     void findNext() override;
     void findPrevious() override;
+    void setPlainFocus() override;
     void findNextPrevious(bool previous);
 };
 

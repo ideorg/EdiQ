@@ -30,6 +30,7 @@ public:
     virtual void find()  = 0;
     virtual void findNext()  = 0;
     virtual void findPrevious()  = 0;
+    virtual void setPlainFocus()  = 0;
 };
 
 

@@ -196,6 +196,10 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event) {
             int n = key > '0'? key-'1': 9;
             activateTab(n);
             return true;
+        } else if (key == Qt::Key_Escape) {
+            IEditor* editor = editorFactory->getCurrentEditor();
+            if (editor)
+                editor->setPlainFocus();
         }
     }
     return QObject::eventFilter(target, event);

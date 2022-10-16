@@ -484,3 +484,7 @@ void CodeEditor::findPrevious() {
 QString CodeEditor::getPath() {
     return path;
 }
+
+void CodeEditor::setPlainFocus() {
+    plainEdit->setFocus();
+}
