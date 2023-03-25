@@ -47,6 +47,12 @@ SearchBar::SearchBar(CodeEditor *editor)
     qApp->installEventFilter(this);
 }
 
+
+void SearchBar::showEvent( QShowEvent* event ) {
+    QWidget::showEvent( event );
+    textToFind->selectAll();
+}
+
 void SearchBar::keyPressEvent(QKeyEvent *event)
 {
     if( event->key() == Qt::Key_Escape )

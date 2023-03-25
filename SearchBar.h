@@ -41,6 +41,7 @@ Q_OBJECT
     QToolButton *closeButton;
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+    void showEvent( QShowEvent* event ) override;
 public:
     explicit SearchBar(CodeEditor *editor);
     SearchState searchState;
