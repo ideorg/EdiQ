@@ -159,18 +159,12 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
     plainEdit = new PlainTextEdit(this);
     sideBar = new CodeEditorSidebar(this);
     searchBar = new SearchBar(this);
-    auto *vLayout = new QVBoxLayout;
     auto *hLayout = new QHBoxLayout;
-    vLayout->setContentsMargins(0,0,0,0);
-    vLayout->setSpacing(0);
     hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
     hLayout->addWidget(sideBar);
     hLayout->addWidget(plainEdit);
-    searchBar->hide();
-    vLayout->addWidget(searchBar);
-    vLayout->addLayout(hLayout);
-    setLayout(vLayout);
+    setLayout(hLayout);
     highlighter = new KSyntaxHighlighting::SyntaxHighlighter(plainEdit->document());
     plainEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     setTheme((palette().color(QPalette::Base).lightness() < 128) ? repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)

@@ -51,6 +51,8 @@ SearchBar::SearchBar(CodeEditor *editor)
 void SearchBar::showEvent( QShowEvent* event ) {
     QWidget::showEvent( event );
     textToFind->selectAll();
+    setGeometry(0,0,codeEditor->width(),textToFind->height());
+    setFocus();
 }
 
 void SearchBar::keyPressEvent(QKeyEvent *event)
