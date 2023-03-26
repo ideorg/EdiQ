@@ -22,6 +22,14 @@ add_subdirectory(SingleApplication)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+
+set(KF_DIR_SYNTAX "/usr/include/KF${QT_VERSION_MAJOR}/KSyntaxHighlighting")
+set(KF_LIB_SYNTAX KF${QT_VERSION_MAJOR}SyntaxHighlighting)
+
+IF(NOT EXISTS ${KF_DIR_SYNTAX})
+    message(FATAL_ERROR "Not found ${KF_DIR_SYNTAX}")
+ENDIF()
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp mainwindow.h
@@ -63,12 +71,12 @@ else()
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-        /usr/include/KF5/KSyntaxHighlighting
+        ${KF_DIR_SYNTAX}
         /usr/include/botan-2)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
         SingleApplication::SingleApplication
-        KF5SyntaxHighlighting
+        ${KF_LIB_SYNTAX}
         X11 botan-2
         )
 
