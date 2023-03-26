@@ -27,7 +27,19 @@ set(KF_DIR_SYNTAX "/usr/include/KF${QT_VERSION_MAJOR}/KSyntaxHighlighting")
 set(KF_LIB_SYNTAX KF${QT_VERSION_MAJOR}SyntaxHighlighting)
 
 IF(NOT EXISTS ${KF_DIR_SYNTAX})
-    message(FATAL_ERROR "Not found ${KF_DIR_SYNTAX}")
+    message(FATAL_ERROR "Not found ${KF_DIR_SYNTAX} major version = ${QT_VERSION_MAJOR}")
+ELSE()
+    message(STATUS "Found ${KF_DIR_SYNTAX} major version = ${QT_VERSION_MAJOR}")
+    IF(NOT EXISTS "${KF_DIR_SYNTAX}/repository.h")
+           set(KF_DIR_SYNTAX "${KF_DIR_SYNTAX}/KSyntaxHighlighting") #Manjaro
+    ENDIF()
+ENDIF()
+
+set(BOTAN_DIR "/usr/include/botan-2")
+IF(NOT EXISTS ${BOTAN_DIR})
+    message(FATAL_ERROR "Not found ${BOTAN_DIR}")
+ELSE()
+    message(STATUS "Found ${BOTAN_DIR}")
 ENDIF()
 
 set(PROJECT_SOURCES
@@ -72,7 +84,7 @@ endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
         ${KF_DIR_SYNTAX}
-        /usr/include/botan-2)
+        ${BOTAN_DIR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
         SingleApplication::SingleApplication
