@@ -12,4 +12,8 @@ Ubuntu, Mint and similar:
 * sudo apt install libkf5syntaxhighlighting-dev
 * sudo apt install libbotan-2-dev
 
+Manjaro and other Arch:
+* pamac install qt5-base
+* pamac install syntax-highlighting
+* pamac install botan
 
