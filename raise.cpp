@@ -6,36 +6,42 @@
 #include <cstdio>
 #include <string>
 #include <iostream>
+#include <vector>
 #ifndef _WIN32
 #include "XRaise.h"
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <csignal>
 
-bool searchHelper(Display* display, Window w, Atom& atomPID, unsigned long pid, Window& result)
+static long windowProperty(Display* dpy, Window focuswin, const char* property)
 {
-    bool ret = false;
+    Atom nameAtom = XInternAtom(dpy, property, 1);
+    Atom type;
+    int format, status;
+    long pid = -1;
+    unsigned long nitems, after;
+    unsigned char *data;
 
-    Atom atomType;
-    int format;
-    unsigned long nItems;
-    unsigned long bytesAfter;
-    unsigned char* propPID = 0;
-    if (Success == XGetWindowProperty(display,w,atomPID,0,1,False,XA_CARDINAL,&atomType,&format,&nItems,&bytesAfter,&propPID))
-    {
-        if (propPID != 0)
-        {
-            if (pid == *((unsigned long *)propPID))
-            {
-                result = w;
-                ret = true;
-            }
-            XFree(propPID);
-        }
-    }
+    status = XGetWindowProperty(dpy, focuswin, nameAtom, 0, 1024, 0,
+                                XA_CARDINAL, &type, &format, &nitems, &after, &data);
+    if (status == Success && data) {
+        pid = *((long*)data);
+        XFree(data);
+     }
+    else;
+    return pid;
+}
 
-    if (ret)
-        return result; //we found we can stop
+static long windowPid(Display* dpy, Window focuswin) {
+    return windowProperty(dpy, focuswin, "_NET_WM_PID");
+}
+
+std::vector<Window> searchHelper(Display* display, int w, unsigned long pid)
+{
+    std::vector<Window> ret;
+    unsigned long retpid = windowPid(display, w);
+    if (retpid==pid)
+        ret.push_back(w);
 
 //check the children of the window
     Window wRoot;
@@ -45,8 +51,30 @@ bool searchHelper(Display* display, Window w, Atom& atomPID, unsigned long pid, 
     if (XQueryTree(display, w, &wRoot, &wParent, &wChild, &nChildren) != 0 )
     {
         for (unsigned i=0; i<nChildren; ++i)
-        {   //<------------always last found ret?
-            ret = searchHelper(display, wChild[i], atomPID, pid, result);
+        {
+            auto ret1 = searchHelper(display, wChild[i], pid);
+            ret.insert(std::end(ret), std::begin(ret1), std::end(ret1));
+        }
+    }
+    return ret;
+}
+
+int area(Display* display, Window w) {
+    XWindowAttributes attr;
+    if (XGetWindowAttributes(display, w, &attr))
+        return attr.height * attr.width;
+    else
+        return 0;
+}
+
+Window searchmaxArea(Display* display, std::vector<Window> &winlist) {
+    Window result = 0;
+    int maxArea = 0;
+    for (auto w: winlist) {
+        int a = area(display, w);
+        if (a > maxArea){
+            maxArea = a;
+            result = w;
         }
     }
     return result;
@@ -55,21 +83,17 @@ bool searchHelper(Display* display, Window w, Atom& atomPID, unsigned long pid, 
 int pid2wid(int pid) {
     Display *display = XOpenDisplay(0);
     Window window = XDefaultRootWindow(display);
-    Atom atomPID = XInternAtom(display, "_NET_WM_PID", true);
-    if (atomPID == None)
-    {
-        return 1;
-    }
-    Window result;
-    searchHelper(display, window, atomPID, pid, result);
-    return result;
+    std::vector<Window> result = searchHelper(display, window, pid);
+    return searchmaxArea(display, result);
 }
 
 void raisePid(int pid) {
     int wid = pid2wid(pid);
-    XRaise win(wid);
-    win.fetch();
-    win.activate();
+    if (wid) {
+        XRaise win(wid);
+        win.fetch();
+        win.activate();
+    }
 }
 #endif
 
