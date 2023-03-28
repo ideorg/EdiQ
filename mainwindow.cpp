@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
         IEditor::CloseEnum canClose = IEditor::clClose;
         editorFactory->tryCloseEditor(index, canClose);
     });
+    connect(&tabWidget, &QTabWidget::currentChanged, this, &MainWindow::tabSelected);
     QGuiApplication::instance()->installEventFilter(this);
 }
 
@@ -150,6 +151,7 @@ void MainWindow::saveAsFile() {
     editor->saveAs();
     tabWidget.setTabText(tabWidget.currentIndex(), editor->getTitle());
     editorFactory->onTextChanged();
+    tabSelected(tabWidget.currentIndex());
 }
 
 void MainWindow::closeFile() {
@@ -235,4 +237,10 @@ void MainWindow::insertBoth() {
     IEditor *editor = editorFactory->getCurrentEditor();
     if (!editor) return;
     editor->insertBoth();
+}
+
+void MainWindow::tabSelected(int n) {
+    IEditor *editor = editorFactory->getCurrentEditor();
+    if (!editor) return;
+    this->setWindowTitle(editor->getPath());
 }

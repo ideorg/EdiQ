@@ -24,6 +24,7 @@ public:
 protected:
     void closeEvent(QCloseEvent *event) override;
 private:
+    void tabSelected(int n);
     IEditorFactory *editorFactory;
     void createMenus();
     QTabWidget tabWidget;
