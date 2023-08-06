@@ -12,12 +12,14 @@
 
 
 #include <QTabWidget>
+#include <Repository>
 #include "IEditorFactory.h"
 #include "UntitledCounter.h"
 
 class EditorFactory : public QObject, public IEditorFactory {
     QTabWidget *tabWidget;
     UntitledCounter untitledCounter;
+    KSyntaxHighlighting::Repository repository;
 public:
     explicit EditorFactory(QTabWidget *tabWidget):tabWidget(tabWidget){};
     IEditor *createEditorTab(const QString& path) override;

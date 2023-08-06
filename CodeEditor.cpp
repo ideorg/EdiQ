@@ -155,7 +155,8 @@ void CodeEditor::updateSidebarGeometry() {
     sideBar->setFixedWidth(sidebarWidth());
 }
 
-CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
+CodeEditor::CodeEditor(QString path, KSyntaxHighlighting::Repository& repository) :
+        path(std::move(path)),repository(repository) {
     plainEdit = new PlainTextEdit(this);
     sideBar = new CodeEditorSidebar(this);
     searchBar = new SearchBar(this);

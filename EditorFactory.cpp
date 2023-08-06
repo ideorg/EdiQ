@@ -12,7 +12,7 @@
 #include "EdiException.h"
 
 IEditor *EditorFactory::createEditorTab(const QString& path) {
-    auto *editor = new CodeEditor(path);
+    auto *editor = new CodeEditor(path, repository);
     connect(editor->plainEdit, &PlainTextEdit::textChanged, this, &EditorFactory::onTextChanged);
     connect(editor->searchBar, &SearchBar::onTextChanged, this, &EditorFactory::onTextChanged);
     editor->untitledId = untitledCounter.getNextId();

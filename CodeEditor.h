@@ -32,14 +32,14 @@ class CodeEditor : public QWidget, public IEditor {
     bool saveFile();
     CodeEditorSidebar *sideBar;
     SearchBar *searchBar;
-    KSyntaxHighlighting::Repository repository;
+    KSyntaxHighlighting::Repository& repository;
     KSyntaxHighlighting::SyntaxHighlighter *highlighter;
     void updateSidebarGeometry();
     void updateSidebarArea(const QRect &rect, int dy);
     void highlightCurrentLine();
     void setTheme(const KSyntaxHighlighting::Theme &theme);
 public:
-    explicit CodeEditor(QString path);
+    explicit CodeEditor(QString path, KSyntaxHighlighting::Repository& repository);
     PlainTextEdit *plainEdit;
     void clearSearch();
     void search(const QString &searchString);
