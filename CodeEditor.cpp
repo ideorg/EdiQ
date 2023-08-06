@@ -9,9 +9,9 @@
 
 #include "CodeEditor.h"
 #include "een.h"
-#include <definition.h>
-#include <syntaxhighlighter.h>
-#include <theme.h>
+#include <KF5/KSyntaxHighlighting/definition.h>
+#include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
+#include <KF5/KSyntaxHighlighting/theme.h>
 #include <QApplication>
 #include <QFile>
 #include <QDebug>

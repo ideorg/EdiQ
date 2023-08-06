@@ -12,7 +12,7 @@
 
 
 #include <QTabWidget>
-#include <Repository>
+#include <KF5/KSyntaxHighlighting/Repository>
 #include "IEditorFactory.h"
 #include "UntitledCounter.h"
 
