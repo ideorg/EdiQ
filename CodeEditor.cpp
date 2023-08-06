@@ -159,6 +159,7 @@ CodeEditor::CodeEditor(QString path) : path(std::move(path)) {
     plainEdit = new PlainTextEdit(this);
     sideBar = new CodeEditorSidebar(this);
     searchBar = new SearchBar(this);
+    searchBar->hide();
     auto *hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
