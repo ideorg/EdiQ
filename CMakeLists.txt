@@ -44,7 +44,8 @@ set(PROJECT_SOURCES
         SearchBar.cpp SearchBar.h
         Popup.cpp Popup.h
         raise.cpp raise.h XRaise.cpp XRaise.h
-        een.cpp een.h)
+        een.cpp een.h
+        PlainTextEdit.cpp)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}

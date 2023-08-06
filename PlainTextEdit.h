@@ -15,6 +15,8 @@
 #include <QRectF>
 
 class PlainTextEdit : public QPlainTextEdit {
+protected:
+    void contextMenuEvent(QContextMenuEvent *event) override;
 public:
     explicit PlainTextEdit(QWidget *parent = nullptr): QPlainTextEdit(parent){};
     QTextBlock firstVisibleBlock_pub() {
@@ -33,6 +35,5 @@ public:
         return QPlainTextEdit::resizeEvent(e);
     }
 };
-
 
 #endif //EDIQ_PLAINTEXTEDIT_H

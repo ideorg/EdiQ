@@ -397,6 +397,15 @@ QTextBlock CodeEditor::blockAtPosition(int y) const
 
 void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
     auto menu = plainEdit->createStandardContextMenu(event->pos());
+    menu->addSeparator();
+    auto openAction = menu->addAction(QStringLiteral("Open File..."));
+    connect(openAction, &QAction::triggered, this, [this]() {
+        const auto fileName = QFileDialog::getOpenFileName(this, QStringLiteral("Open File"));
+        if (!fileName.isEmpty()) {
+            path = fileName;
+            openFile();
+        }
+    });
 
     // syntax selection
     auto hlActionGroup = new QActionGroup(menu);

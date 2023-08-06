@@ -43,9 +43,8 @@ public:
     PlainTextEdit *plainEdit;
     void clearSearch();
     void search(const QString &searchString);
-protected:
-    void contextMenuEvent(QContextMenuEvent *event) override;
 public:
+    void contextMenuEvent(QContextMenuEvent *event) override;
     int sidebarWidth() const;
     void sidebarPaintEvent(QPaintEvent *event);
     QTextBlock blockAtPosition(int y) const;
