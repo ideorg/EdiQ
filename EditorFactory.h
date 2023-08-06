@@ -21,7 +21,7 @@ class EditorFactory : public QObject, public IEditorFactory {
     UntitledCounter untitledCounter;
     KSyntaxHighlighting::Repository repository;
 public:
-    explicit EditorFactory(QTabWidget *tabWidget):tabWidget(tabWidget){};
+    explicit EditorFactory(QTabWidget *tabWidget);
     IEditor *createEditorTab(const QString& path) override;
     int getEditorCount() override;
     IEditor *getEditor(int index) override;

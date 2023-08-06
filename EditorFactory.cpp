@@ -7,6 +7,7 @@
 **
 ****************************************************************************/
 
+#include <QStandardPaths>
 #include "EditorFactory.h"
 #include "CodeEditor.h"
 #include "EdiException.h"
@@ -87,4 +88,8 @@ void EditorFactory::onTextChanged() {
     bool modified = editor->isModified();
     QColor color = modified? Qt::red : Qt::black;
     tabWidget->tabBar()->setTabTextColor(tabWidget->currentIndex(),color);
+}
+
+EditorFactory::EditorFactory(QTabWidget *tabWidget):tabWidget(tabWidget) {
+    repository.addCustomSearchPath(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QStringLiteral("/org.kde.syntax-highlighting"));
 }
