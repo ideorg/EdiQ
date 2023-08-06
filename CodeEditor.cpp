@@ -318,8 +318,7 @@ void CodeEditor::highlightCurrentLine() {
     plainEdit->setExtraSelections(extraSelections);
 }
 
-void CodeEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
-{
+void CodeEditor::setTheme(const KSyntaxHighlighting::Theme &theme) {
     auto pal = qApp->palette();
     if (theme.isValid()) {
         pal.setColor(QPalette::Base, theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor));
