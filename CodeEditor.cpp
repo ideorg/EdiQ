@@ -249,7 +249,9 @@ void CodeEditor::sidebarPaintEvent(QPaintEvent *event) {
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             const auto number = QString::number(blockNumber + 1);
-            painter.setPen(highlighter->theme().editorColor((blockNumber == currentBlockNumber) ? KSyntaxHighlighting::Theme::CurrentLineNumber             : KSyntaxHighlighting::Theme::LineNumbers));
+            painter.setPen(highlighter->theme().editorColor((blockNumber == currentBlockNumber)
+                ? KSyntaxHighlighting::Theme::CurrentLineNumber
+                : KSyntaxHighlighting::Theme::LineNumbers));
             painter.drawText(2, top, sideBar->width(), fontMetrics().height(), Qt::AlignLeft, number);
         }
 
@@ -303,7 +305,10 @@ int CodeEditor::sidebarWidth() const
 
 void CodeEditor::highlightCurrentLine() {
     QTextEdit::ExtraSelection selection;
-    selection.format.setBackground(QColor(252,250,237));
+    auto colorRole= KSyntaxHighlighting::Theme::CurrentLine;
+    auto rgb = highlighter->theme().editorColor(colorRole);
+    QBrush brush(rgb);
+    selection.format.setBackground(brush);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
     selection.cursor = plainEdit->textCursor();
     selection.cursor.clearSelection();
