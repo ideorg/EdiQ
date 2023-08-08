@@ -65,7 +65,6 @@ void SearchBar::keyPressEvent(QKeyEvent *event)
 
 void SearchBar::addControls() {
     auto *hLayout = new QHBoxLayout;
-    hLayout->setMargin(0);
     hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
     button = new QPushButton("");

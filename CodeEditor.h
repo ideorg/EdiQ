@@ -10,7 +10,7 @@
 #ifndef EDIQ_CODEEDITOR_H
 #define EDIQ_CODEEDITOR_H
 
-#include <KF5/KSyntaxHighlighting/repository.h>
+#include "repository.h"
 #include <QString>
 #include <QPlainTextEdit>
 #include <utility>

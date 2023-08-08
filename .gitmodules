@@ -1,3 +1,6 @@
 [submodule "SingleApplication"]
-	path = SingleApplication
+	path = 3rdParty/SingleApplication
 	url = https://github.com/itay-grudev/SingleApplication.git
+[submodule "3rdParty/syntax-hi-lib"]
+	path = 3rdParty/syntax-hi-lib
+	url = https://github.com/ideorg/syntax-hi-lib.git

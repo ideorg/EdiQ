@@ -9,9 +9,9 @@
 
 #include "CodeEditor.h"
 #include "een.h"
-#include <KF5/KSyntaxHighlighting/definition.h>
-#include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
-#include <KF5/KSyntaxHighlighting/theme.h>
+#include "definition.h"
+#include "syntaxhighlighter.h"
+#include "theme.h"
 #include <QApplication>
 #include <QFile>
 #include <QDebug>
@@ -25,6 +25,8 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <chrono>
+#include <QRegularExpression>
+#include "definitiondownloader.h"
 
 void CodeEditor::openFile() {
     if (path.endsWith(".een")) {
@@ -190,7 +192,7 @@ void CodeEditor::clearSearch() {
 
 void CodeEditor::search(const QString &searchString) {
     bool modifiedBefore = plainEdit->document()->isModified();
-    QRegExp regExp(searchString);
+    QRegularExpression regExp(searchString);
     QTextCursor selCursor;
     selCursor = plainEdit->textCursor();
     clearSearch();
@@ -475,7 +477,7 @@ void CodeEditor::find() {
 void CodeEditor::findNextPrevious(bool previous) {
     bool modifiedBefore = plainEdit->document()->isModified();
     const QString searchString = searchBar->textToFind->text();
-    QRegExp regExp(searchString);
+    QRegularExpression regExp(searchString);
     QTextCursor selCursor;
     selCursor = plainEdit->textCursor();
     auto flags = searchBar->searchState.findFlag;
