@@ -411,6 +411,25 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
         }
     });
 
+    // theme selection
+    auto themeGroup = new QActionGroup(menu);
+    themeGroup->setExclusive(true);
+    auto themeMenu = menu->addMenu(QStringLiteral("Theme"));
+    for (const auto &theme : repository.themes()) {
+        auto action = themeMenu->addAction(theme.translatedName());
+        action->setCheckable(true);
+        action->setData(theme.name());
+        themeGroup->addAction(action);
+        if (theme.name() == highlighter->theme().name()) {
+            action->setChecked(true);
+        }
+    }
+    connect(themeGroup, &QActionGroup::triggered, this, [this](QAction *action) {
+        const auto themeName = action->data().toString();
+        const auto theme = repository.theme(themeName);
+        setTheme(theme);
+    });
+
     // syntax selection
     auto hlActionGroup = new QActionGroup(menu);
     hlActionGroup->setExclusive(true);
@@ -439,25 +458,6 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
         const auto defName = action->data().toString();
         const auto def = repository.definitionForName(defName);
         highlighter->setDefinition(def);
-    });
-
-    // theme selection
-    auto themeGroup = new QActionGroup(menu);
-    themeGroup->setExclusive(true);
-    auto themeMenu = menu->addMenu(QStringLiteral("Theme"));
-    for (const auto &theme : repository.themes()) {
-        auto action = themeMenu->addAction(theme.translatedName());
-        action->setCheckable(true);
-        action->setData(theme.name());
-        themeGroup->addAction(action);
-        if (theme.name() == highlighter->theme().name()) {
-            action->setChecked(true);
-        }
-    }
-    connect(themeGroup, &QActionGroup::triggered, this, [this](QAction *action) {
-        const auto themeName = action->data().toString();
-        const auto theme = repository.theme(themeName);
-        setTheme(theme);
     });
 
     menu->exec(event->globalPos());
