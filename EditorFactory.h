@@ -19,9 +19,11 @@
 class EditorFactory : public QObject, public IEditorFactory {
     QTabWidget *tabWidget;
     UntitledCounter untitledCounter;
-    KSyntaxHighlighting::Repository repository;
+    KSyntaxHighlighting::Repository* repository;
+    QString themeName = "";
 public:
     explicit EditorFactory(QTabWidget *tabWidget);
+    ~EditorFactory() {delete repository;}
     IEditor *createEditorTab(const QString& path) override;
     int getEditorCount() override;
     IEditor *getEditor(int index) override;
@@ -31,6 +33,8 @@ public:
     bool tryCloseCurrentEditor() override;
     bool tryCloseAll() override;
     void onTextChanged() override;
+    void onRefreshRepository();
+    void onChangeThemeName(QString newName);
 private:
     void closeEditor(int index);
 };

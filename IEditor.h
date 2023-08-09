@@ -10,8 +10,8 @@
 #ifndef EDIQ_IEDITOR_H
 #define EDIQ_IEDITOR_H
 
-
 #include <QString>
+#include "repository.h"
 
 class IEditor {
 public:
@@ -34,6 +34,8 @@ public:
     virtual void insertDate()  = 0;
     virtual void insertTime()  = 0;
     virtual void insertBoth()  = 0;
+    virtual void setRepository(KSyntaxHighlighting::Repository *repository, QString themeName)  = 0;
+    virtual void setTheme(QString themeName)  = 0;
 };
 
 

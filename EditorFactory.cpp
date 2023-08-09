@@ -13,9 +13,12 @@
 #include "EdiException.h"
 
 IEditor *EditorFactory::createEditorTab(const QString& path) {
-    auto *editor = new CodeEditor(path, repository);
+    auto *editor = new CodeEditor(path, this);
+    editor->setRepository(repository, themeName);
     connect(editor->plainEdit, &PlainTextEdit::textChanged, this, &EditorFactory::onTextChanged);
     connect(editor->searchBar, &SearchBar::onTextChanged, this, &EditorFactory::onTextChanged);
+    connect(editor, &CodeEditor::refreshRepository, this,  &EditorFactory::onRefreshRepository);
+    connect(editor, &CodeEditor::setThemeName, this,  &EditorFactory::onChangeThemeName);
     editor->untitledId = untitledCounter.getNextId();
     tabWidget->addTab(editor, editor->getTitle());
     return editor;
@@ -90,5 +93,23 @@ void EditorFactory::onTextChanged() {
     tabWidget->tabBar()->setTabTextColor(tabWidget->currentIndex(),color);
 }
 
+void EditorFactory::onRefreshRepository() {
+    delete repository;
+    repository = new KSyntaxHighlighting::Repository();
+    for (int i=0; i<getEditorCount(); i++) {
+        IEditor* editor = getEditor(i);
+        editor->setRepository(repository, themeName);
+    }
+}
+
+void EditorFactory::onChangeThemeName(QString newName) {
+    themeName = newName;
+    for (int i=0; i<getEditorCount(); i++) {
+        IEditor* editor = getEditor(i);
+        editor->setTheme(themeName);
+    }
+}
+
 EditorFactory::EditorFactory(QTabWidget *tabWidget):tabWidget(tabWidget) {
+    repository = new KSyntaxHighlighting::Repository();
 }

@@ -15,6 +15,7 @@
 #include <QPlainTextEdit>
 #include <utility>
 #include "IEditor.h"
+#include "IEditorFactory.h"
 #include "QMessageBox"
 #include "CodeEditorSidebar.h"
 #include "SearchBar.h"
@@ -26,23 +27,27 @@ namespace KSyntaxHighlighting
 }
 
 class CodeEditor : public QWidget, public IEditor {
+Q_OBJECT
     QString path;
+    IEditorFactory *editorFactory;
     std::string eenPassword;
     int untitledId = 0;
     bool saveFile();
     CodeEditorSidebar *sideBar;
     SearchBar *searchBar;
-    KSyntaxHighlighting::Repository& repository;
-    KSyntaxHighlighting::SyntaxHighlighter *highlighter;
+    KSyntaxHighlighting::Repository* repository = nullptr;
+    KSyntaxHighlighting::SyntaxHighlighter *highlighter = nullptr;
     void updateSidebarGeometry();
     void updateSidebarArea(const QRect &rect, int dy);
     void highlightCurrentLine();
     void setTheme(const KSyntaxHighlighting::Theme &theme);
 public:
-    explicit CodeEditor(QString path, KSyntaxHighlighting::Repository& repository);
+    explicit CodeEditor(QString path, IEditorFactory *editorFactory);
     PlainTextEdit *plainEdit;
     void clearSearch();
     void search(const QString &searchString);
+    void setRepository(KSyntaxHighlighting::Repository *repository, QString themeName) override;
+    void setTheme(QString themeName) override;
 public:
     void contextMenuEvent(QContextMenuEvent *event) override;
     int sidebarWidth() const;
@@ -69,6 +74,9 @@ public:
     void insertDate() override;
     void insertTime() override;
     void insertBoth() override;
+signals:
+    void refreshRepository();
+    void setThemeName(QString themeName);
 };
 
 

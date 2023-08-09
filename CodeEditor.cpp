@@ -37,7 +37,7 @@ void CodeEditor::openFile() {
         qWarning() << "Failed to open" << path << ":" << f.errorString();
         return;
     }
-    const auto def = repository.definitionForFileName(path);
+    const auto def = repository->definitionForFileName(path);
     highlighter->setDefinition(def);
     bool isEen = path.endsWith(".een");
     QByteArray bytes = f.readAll();
@@ -157,8 +157,8 @@ void CodeEditor::updateSidebarGeometry() {
     sideBar->setFixedWidth(sidebarWidth());
 }
 
-CodeEditor::CodeEditor(QString path, KSyntaxHighlighting::Repository& repository) :
-        path(std::move(path)),repository(repository) {
+CodeEditor::CodeEditor(QString path, IEditorFactory *editorFactory) :
+        path(std::move(path)), editorFactory(editorFactory) {
     plainEdit = new PlainTextEdit(this);
     sideBar = new CodeEditorSidebar(this);
     searchBar = new SearchBar(this);
@@ -169,17 +169,35 @@ CodeEditor::CodeEditor(QString path, KSyntaxHighlighting::Repository& repository
     hLayout->addWidget(sideBar);
     hLayout->addWidget(plainEdit);
     setLayout(hLayout);
-    highlighter = new KSyntaxHighlighting::SyntaxHighlighter(plainEdit->document());
     plainEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-    setTheme((palette().color(QPalette::Base).lightness() < 128) ? repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-                                                                 : repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+
     connect(plainEdit, &QPlainTextEdit::blockCountChanged, this, &CodeEditor::updateSidebarGeometry);
     connect(plainEdit, &QPlainTextEdit::updateRequest, this, &CodeEditor::updateSidebarArea);
     connect(plainEdit, &QPlainTextEdit::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+}
 
+void CodeEditor::setRepository(KSyntaxHighlighting::Repository *repository, QString themeName) {
+    delete highlighter;
+    this->repository = repository;
+    highlighter = new KSyntaxHighlighting::SyntaxHighlighter(plainEdit->document());
+    const auto def = repository->definitionForFileName(path);
+    highlighter->setDefinition(def);
+    setTheme(themeName);
+}
+
+
+
+void CodeEditor::setTheme(QString themeName) {
+    const auto theme = repository->theme(themeName);
+    if (themeName=="" || theme.name()!=themeName) {
+        const auto defTheme = (palette().color(QPalette::Base).lightness() < 128) ? repository->defaultTheme(
+                KSyntaxHighlighting::Repository::DarkTheme): repository->defaultTheme(KSyntaxHighlighting::Repository::LightTheme);
+        setTheme(defTheme);
+    } else setTheme(theme);
     updateSidebarGeometry();
     highlightCurrentLine();
 }
+
 
 void CodeEditor::clearSearch() {
     bool modifiedBefore = plainEdit->document()->isModified();
@@ -417,7 +435,7 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
     auto themeGroup = new QActionGroup(menu);
     themeGroup->setExclusive(true);
     auto themeMenu = menu->addMenu(QStringLiteral("Theme"));
-    for (const auto &theme : repository.themes()) {
+    for (const auto &theme : repository->themes()) {
         auto action = themeMenu->addAction(theme.translatedName());
         action->setCheckable(true);
         action->setData(theme.name());
@@ -428,8 +446,7 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
     }
     connect(themeGroup, &QActionGroup::triggered, this, [this](QAction *action) {
         const auto themeName = action->data().toString();
-        const auto theme = repository.theme(themeName);
-        setTheme(theme);
+        emit setThemeName(themeName);
     });
 
     // syntax selection
@@ -439,7 +456,7 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
     QMenu* hlSubMenu = hlGroupMenu;
     QString currentGroup;
     QAction* choosedAction = nullptr;
-    for (const auto &def : repository.definitions()) {
+    for (const auto &def : repository->definitions()) {
         if (def.isHidden()) {
             continue;
         }
@@ -467,8 +484,14 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
 
     connect(hlActionGroup, &QActionGroup::triggered, this, [this](QAction *action) {
         const auto defName = action->data().toString();
-        const auto def = repository.definitionForName(defName);
+        const auto def = repository->definitionForName(defName);
         highlighter->setDefinition(def);
+    });
+
+
+    auto refreshAction = menu->addAction(QStringLiteral("Refresh themes and syntax"));
+    connect(refreshAction, &QAction::triggered, this, [this]() {
+        emit refreshRepository();
     });
 
     menu->exec(event->globalPos());
