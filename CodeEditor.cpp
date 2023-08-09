@@ -456,7 +456,7 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
         if (def.name() == highlighter->definition().name()) {
             action->setChecked(true);
             if (def.name()!="None") {
-                choosedAction = new QAction(hlSubMenu->title() + "/" + def.translatedName());
+                choosedAction = new QAction(hlSubMenu->title() + " / " + def.translatedName());
                 choosedAction->setCheckable(true);
                 choosedAction->setChecked(true);
             }
