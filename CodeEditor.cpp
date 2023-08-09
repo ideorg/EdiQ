@@ -436,8 +436,9 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
     auto hlActionGroup = new QActionGroup(menu);
     hlActionGroup->setExclusive(true);
     auto hlGroupMenu = menu->addMenu(QStringLiteral("Syntax"));
-    QMenu *hlSubMenu = hlGroupMenu;
+    QMenu* hlSubMenu = hlGroupMenu;
     QString currentGroup;
+    QAction* choosedAction = nullptr;
     for (const auto &def : repository.definitions()) {
         if (def.isHidden()) {
             continue;
@@ -454,8 +455,16 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event) {
         hlActionGroup->addAction(action);
         if (def.name() == highlighter->definition().name()) {
             action->setChecked(true);
+            if (def.name()!="None") {
+                choosedAction = new QAction(hlSubMenu->title() + "/" + def.translatedName());
+                choosedAction->setCheckable(true);
+                choosedAction->setChecked(true);
+            }
         }
     }
+    hlGroupMenu->addSeparator();
+    hlGroupMenu->addAction(choosedAction);
+
     connect(hlActionGroup, &QActionGroup::triggered, this, [this](QAction *action) {
         const auto defName = action->data().toString();
         const auto def = repository.definitionForName(defName);
