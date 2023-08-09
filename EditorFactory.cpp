@@ -91,5 +91,4 @@ void EditorFactory::onTextChanged() {
 }
 
 EditorFactory::EditorFactory(QTabWidget *tabWidget):tabWidget(tabWidget) {
-    repository.addCustomSearchPath(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QStringLiteral("/org.kde.syntax-highlighting"));
 }
