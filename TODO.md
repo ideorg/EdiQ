@@ -1,2 +1,3 @@
-save-as - title not "untitled"
-downloader
+- some build themes if not org.kde.syntax-highlighting
+- save-as - title not "untitled"
+- downloader
