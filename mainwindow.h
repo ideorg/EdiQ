@@ -12,6 +12,7 @@
 
 #include <QMainWindow>
 #include "IEditorFactory.h"
+#include "downloader.h"
 
 class MainWindow : public QMainWindow
 {
@@ -43,5 +44,7 @@ private:
     void insertDate();
     void insertTime();
     void insertBoth();
+    void onDownloaded();
+    KSyntaxHighlighting::DoubleDownloader downloader;
 };
 #endif // MAINWINDOW_H

@@ -22,7 +22,8 @@ public:
     virtual bool tryCloseEditor(int index, IEditor::CloseEnum &canClose) = 0;
     virtual bool tryCloseCurrentEditor() = 0;
     virtual bool tryCloseAll() = 0;
-    virtual void onTextChanged()  = 0;
+    virtual void onTextChanged() = 0;
+    virtual void onRefreshRepository() = 0;
 };
 
 

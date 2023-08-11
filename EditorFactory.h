@@ -33,7 +33,7 @@ public:
     bool tryCloseCurrentEditor() override;
     bool tryCloseAll() override;
     void onTextChanged() override;
-    void onRefreshRepository();
+    void onRefreshRepository() override;
     void onChangeThemeName(QString newName);
 private:
     void closeEditor(int index);

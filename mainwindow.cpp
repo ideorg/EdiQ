@@ -16,6 +16,7 @@
 #include <QGuiApplication>
 #include "raise.h"
 #include "CodeEditor.h"
+#include "libpaths.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -32,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent)
     });
     connect(&tabWidget, &QTabWidget::currentChanged, this, &MainWindow::tabSelected);
     QGuiApplication::instance()->installEventFilter(this);
+    connect(&downloader, &KSyntaxHighlighting::DoubleDownloader::done, this, &MainWindow::onDownloaded);
+    downloader.setPath(KSyntaxHighlighting::LibPaths::data());
+    if (downloader.mustDownload())
+        downloader.start();
 }
 
 MainWindow::~MainWindow()
@@ -243,4 +248,8 @@ void MainWindow::tabSelected(int n) {
     IEditor *editor = editorFactory->getCurrentEditor();
     if (!editor) return;
     this->setWindowTitle(editor->getPath());
+}
+
+void MainWindow::onDownloaded() {
+    editorFactory->onRefreshRepository();
 }
