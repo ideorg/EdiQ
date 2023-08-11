@@ -19,7 +19,7 @@
 class EditorFactory : public QObject, public IEditorFactory {
     QTabWidget *tabWidget;
     UntitledCounter untitledCounter;
-    KSyntaxHighlighting::Repository* repository;
+    KSyntaxHighlighting::Repository* repository = nullptr;
     QString themeName = "";
 public:
     explicit EditorFactory(QTabWidget *tabWidget);

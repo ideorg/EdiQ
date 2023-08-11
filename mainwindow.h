@@ -45,6 +45,8 @@ private:
     void insertTime();
     void insertBoth();
     void onDownloaded();
+    QAction *downloadUpdateAct;
+    void downloadUpdate();
     KSyntaxHighlighting::DoubleDownloader downloader;
 };
 #endif // MAINWINDOW_H

@@ -35,8 +35,10 @@ MainWindow::MainWindow(QWidget *parent)
     QGuiApplication::instance()->installEventFilter(this);
     connect(&downloader, &KSyntaxHighlighting::DoubleDownloader::done, this, &MainWindow::onDownloaded);
     downloader.setPath(KSyntaxHighlighting::LibPaths::data());
-    if (downloader.mustDownload())
+    if (downloader.mustDownload()) {
+        downloadUpdateAct->setEnabled(false);
         downloader.start();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -104,6 +106,12 @@ void MainWindow::createMenus() {
     QAction *insertBothAct = new QAction(tr("insert &Both date and time"), this);
     toolsMenu->addAction(insertBothAct);
     connect(insertBothAct, &QAction::triggered, this, &MainWindow::insertBoth);
+
+    toolsMenu->addSeparator();
+
+    downloadUpdateAct = new QAction(tr("download &Update"), this);
+    toolsMenu->addAction(downloadUpdateAct);
+    connect(insertBothAct, &QAction::triggered, this, &MainWindow::downloadUpdate);
 }
 
 void MainWindow::newFile() {
@@ -252,4 +260,10 @@ void MainWindow::tabSelected(int n) {
 
 void MainWindow::onDownloaded() {
     editorFactory->onRefreshRepository();
+    downloadUpdateAct->setEnabled(true);
+}
+
+void MainWindow::downloadUpdate() {
+    downloadUpdateAct->setEnabled(false);
+    downloader.start();
 }
