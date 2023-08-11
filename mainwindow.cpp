@@ -111,7 +111,7 @@ void MainWindow::createMenus() {
 
     downloadUpdateAct = new QAction(tr("download &Update"), this);
     toolsMenu->addAction(downloadUpdateAct);
-    connect(insertBothAct, &QAction::triggered, this, &MainWindow::downloadUpdate);
+    connect(downloadUpdateAct, &QAction::triggered, this, &MainWindow::downloadUpdate);
 }
 
 void MainWindow::newFile() {
