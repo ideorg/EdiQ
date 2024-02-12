@@ -2,7 +2,7 @@
 
 Text editor especially for DoubleCommander and other twin panel managers
 
-Fedora and similar:
+git clone --recurse-submodules https://github.com/ideorg/EdiQ.git
 
 Ubuntu, Mint and similar:
 * sudo apt install qt6-base-dev
