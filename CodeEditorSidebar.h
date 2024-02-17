@@ -16,14 +16,13 @@ class CodeEditor;
 
 class CodeEditorSidebar : public QWidget {
 Q_OBJECT
-    CodeEditor *codeEditor;
+  CodeEditor *codeEditor;
 public:
-    explicit CodeEditorSidebar(CodeEditor *editor);
-    QSize sizeHint() const override;
+  explicit CodeEditorSidebar(CodeEditor *editor);
+  QSize sizeHint() const override;
 protected:
-    void paintEvent(QPaintEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
+  void paintEvent(QPaintEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
 };
-
 
 #endif //EDIQ_CODEEDITORSIDEBAR_H

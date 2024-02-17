@@ -9,17 +9,17 @@
 #include <X11/Xatom.h>
 
 class XRaise {
-    Display *display;
-    Window root;
-    Window w;
-    bool tryGetCurrentWorkspace(const char *prop_name, uint& result);
-    void xclientSend(const char *msg, long data);
+  Display *display;
+  Window root;
+  Window w;
+  bool tryGetCurrentWorkspace(const char *prop_name, uint &result);
+  void xclientSend(const char *msg, long data);
 public:
-    explicit XRaise(Window w);
-    ~XRaise();
-    uint getCurrentWorkspace();
-    void fetch();
-    void activate();
+  explicit XRaise(Window w);
+  ~XRaise();
+  uint getCurrentWorkspace();
+  void fetch();
+  void activate();
 };
 
 #endif //EDITWRITE_WIN_H
