@@ -35,9 +35,9 @@ int main(int argc, char *argv[])
         QPoint smallScreen(1366,768);
         for (int i=1; i<app.arguments().size(); i++)
             mainWindow.openOrActivate(app.arguments()[i]);
-        mainWindow.setGeometry(int(std::min(screenGeometry.width(),smallScreen.x())*0.1),
-                               int(std::min(screenGeometry.height(),smallScreen.y())*0.1),
-                int(screenGeometry.width()*0.8), int(screenGeometry.height()*0.8));
+        mainWindow.setGeometry(int(screenGeometry.width()*0.1), int(screenGeometry.height()*0.1),
+                               int(std::min(screenGeometry.width(), smallScreen.x())*0.8),
+                               int(std::min(screenGeometry.height(), smallScreen.y())*0.8));
         mainWindow.show();
         return app.exec();
     }
