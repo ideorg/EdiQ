@@ -12,7 +12,6 @@
 
 #include <QMainWindow>
 #include "IEditorFactory.h"
-#include "MRU.h"
 #include "downloader.h"
 
 class MainWindow : public QMainWindow
@@ -26,7 +25,6 @@ public:
 protected:
     void closeEvent(QCloseEvent *event) override;
 private:
-    MRU *recentFiles;
     QMenu *recentMenu;
     void tabSelected(int n);
     IEditorFactory *editorFactory;

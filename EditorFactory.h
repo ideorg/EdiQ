@@ -18,6 +18,7 @@
 class EditorFactory : public QObject, public IEditorFactory {
   QTabWidget *tabWidget;
   UntitledCounter untitledCounter;
+  MRU *mru;
   KSyntaxHighlighting::Repository *repository = nullptr;
   QString themeName = "";
 public:
@@ -34,6 +35,7 @@ public:
   void onTextChanged() override;
   void onRefreshRepository() override;
   void onChangeThemeName(QString newName);
+  MRU* getMRU();
 private:
   void closeEditor(int index);
 };

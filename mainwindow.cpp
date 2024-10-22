@@ -21,12 +21,12 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    createMenus();
     tabWidget.setTabsClosable(true);
     tabWidget.setMovable(true);
     tabWidget.setTabPosition(QTabWidget::South);
     setCentralWidget(&tabWidget);
     editorFactory = new EditorFactory(&tabWidget);
+    createMenus();
     connect(&tabWidget, &QTabWidget::tabCloseRequested, this, [this](int index) {
         IEditor::CloseEnum canClose = IEditor::clClose;
         editorFactory->tryCloseEditor(index, canClose);
@@ -47,8 +47,6 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::createMenus() {
-    recentFiles = new MRU(10, this);
-
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 
     QAction *newAct = new QAction(tr("&New"), this);
@@ -62,8 +60,9 @@ void MainWindow::createMenus() {
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
 
     recentMenu = fileMenu->addMenu(tr("&Recent files"));
-    connect(recentFiles, &MRU::itemAdded, this, &MainWindow::addRecentFile);
-    connect(recentFiles, &MRU::itemRemoved, this, &MainWindow::removeRecentFile);
+    auto mru = editorFactory->getMRU();
+    connect(mru, &MRU::itemAdded, this, &MainWindow::addRecentFile);
+    connect(mru, &MRU::itemRemoved, this, &MainWindow::removeRecentFile);
 
     QAction *saveAct = new QAction(tr("&Save"), this);
     saveAct->setShortcut(QKeySequence("ctrl+s"));
@@ -119,8 +118,8 @@ void MainWindow::createMenus() {
     toolsMenu->addAction(downloadUpdateAct);
     connect(downloadUpdateAct, &QAction::triggered, this, &MainWindow::downloadUpdate);
 
-    recentFiles->add("file1.txt");
-    recentFiles->add("file2.txt");
+    mru->add("../MRU.h");
+    mru->add("../MRU.cpp");
 }
 
 void MainWindow::newFile() {
@@ -145,6 +144,7 @@ void MainWindow::openOrActivate(QString path) {
         editor = (CodeEditor *) editorFactory->createEditorTab(path);
         editor->openFile();
         editorFactory->onTextChanged();
+        editorFactory->getMRU()->takeItem(path);
     }
     tabWidget.setCurrentWidget(editor);
     editor->setPlainFocus();
@@ -281,8 +281,7 @@ void MainWindow::addRecentFile(const QString &fileName) {
   QAction *action = new QAction(fileName, this);
   recentMenu->addAction(action);
   connect(action, &QAction::triggered, this, [this, fileName]() {
-    qDebug() << "Opening file:" << fileName;
-    recentFiles->takeItem(fileName);
+    openOrActivate(fileName);
   });
 }
 

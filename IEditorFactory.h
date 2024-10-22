@@ -11,6 +11,7 @@
 #define EDIQ_IEDITORFACTORY_H
 
 #include "IEditor.h"
+#include "MRU.h"
 
 class IEditorFactory {
 public:
@@ -24,6 +25,7 @@ public:
     virtual bool tryCloseAll() = 0;
     virtual void onTextChanged() = 0;
     virtual void onRefreshRepository() = 0;
+    virtual MRU* getMRU() = 0;
 };
 
 

@@ -112,4 +112,9 @@ void EditorFactory::onChangeThemeName(QString newName) {
 
 EditorFactory::EditorFactory(QTabWidget *tabWidget):tabWidget(tabWidget) {
     repository = new KSyntaxHighlighting::Repository();
+    mru = new MRU(10, this);
+}
+
+MRU *EditorFactory::getMRU() {
+  return mru;
 }
