@@ -40,6 +40,7 @@ void EditorFactory::closeEditor(int index) {
     auto* editor = dynamic_cast<CodeEditor *>(tabWidget->widget(index));
     tabWidget->removeTab(index);
     untitledCounter.releaseId(editor->untitledId);
+    mru->add(editor->path);
     delete editor;
 }
 
