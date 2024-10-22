@@ -47,6 +47,8 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::createMenus() {
+    recentFiles = new MRU(10, this);
+
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 
     QAction *newAct = new QAction(tr("&New"), this);
@@ -58,6 +60,10 @@ void MainWindow::createMenus() {
     openAct->setShortcut(QKeySequence("ctrl+o"));
     fileMenu->addAction(openAct);
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
+
+    recentMenu = fileMenu->addMenu(tr("&Recent files"));
+    connect(recentFiles, &MRU::itemAdded, this, &MainWindow::addRecentFile);
+    connect(recentFiles, &MRU::itemRemoved, this, &MainWindow::removeRecentFile);
 
     QAction *saveAct = new QAction(tr("&Save"), this);
     saveAct->setShortcut(QKeySequence("ctrl+s"));
@@ -112,6 +118,9 @@ void MainWindow::createMenus() {
     downloadUpdateAct = new QAction(tr("download &Update"), this);
     toolsMenu->addAction(downloadUpdateAct);
     connect(downloadUpdateAct, &QAction::triggered, this, &MainWindow::downloadUpdate);
+
+    recentFiles->add("file1.txt");
+    recentFiles->add("file2.txt");
 }
 
 void MainWindow::newFile() {
@@ -266,4 +275,24 @@ void MainWindow::onDownloaded() {
 void MainWindow::downloadUpdate() {
     downloadUpdateAct->setEnabled(false);
     downloader.start();
+}
+
+void MainWindow::addRecentFile(const QString &fileName) {
+  QAction *action = new QAction(fileName, this);
+  recentMenu->addAction(action);
+  connect(action, &QAction::triggered, this, [this, fileName]() {
+    qDebug() << "Opening file:" << fileName;
+    recentFiles->takeItem(fileName);
+  });
+}
+
+void MainWindow::removeRecentFile(const QString &fileName) {
+  QList<QAction *> actions = recentMenu->actions();
+  for (QAction *action : actions) {
+    if (action->text() == fileName) {
+      recentMenu->removeAction(action);
+      delete action;
+      break;
+    }
+  }
 }

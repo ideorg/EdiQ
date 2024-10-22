@@ -12,6 +12,7 @@
 
 #include <QMainWindow>
 #include "IEditorFactory.h"
+#include "MRU.h"
 #include "downloader.h"
 
 class MainWindow : public QMainWindow
@@ -25,12 +26,16 @@ public:
 protected:
     void closeEvent(QCloseEvent *event) override;
 private:
+    MRU *recentFiles;
+    QMenu *recentMenu;
     void tabSelected(int n);
     IEditorFactory *editorFactory;
     void createMenus();
     QTabWidget tabWidget;
     void newFile();
     void openFile();
+    void addRecentFile(const QString &fileName);
+    void removeRecentFile(const QString &fileName);
     void saveFile();
     void saveAsFile();
     void closeFile();
