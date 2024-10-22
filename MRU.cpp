@@ -5,7 +5,8 @@ void MRU::setList(const QStringList &source) {
 }
 
 void MRU::add(const QString &item) {
-  m_items.removeAll(item);
+  while (m_items.removeOne(item))
+    emit itemRemoved(item);
   m_items.prepend(item);
   emit itemAdded(item);
   if (m_items.size() > m_maxSize) {
