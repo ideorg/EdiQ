@@ -45,7 +45,9 @@ set(PROJECT_SOURCES
         Popup.cpp Popup.h
         raise.cpp raise.h XRaise.cpp XRaise.h
         een.cpp een.h
-        PlainTextEdit.cpp)
+        PlainTextEdit.cpp
+        MRU.cpp
+        MRU.h)
 
 qt_add_executable(${PROJECT_NAME}
     MANUAL_FINALIZATION
