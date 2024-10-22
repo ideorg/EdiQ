@@ -1,9 +1,13 @@
 #include "MRU.h"
 
+void MRU::setList(const QStringList &source) {
+  m_items = source;
+  emit setItems(m_items);
+}
+
 void MRU::add(const QString &item) {
   m_items.removeAll(item);
   m_items.prepend(item);
-
   emit itemAdded(item);
   if (m_items.size() > m_maxSize) {
     QString removedItem = m_items.takeLast();
@@ -24,4 +28,3 @@ QString MRU::takeItem(const QString &item) {
 [[nodiscard]] QList<QString> MRU::items() const {
   return m_items;
 }
-

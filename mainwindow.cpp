@@ -8,15 +8,16 @@
 ****************************************************************************/
 
 #include "mainwindow.h"
+#include "CodeEditor.h"
+#include "Config.h"
 #include "EditorFactory.h"
 #include "SearchBar.h"
-#include <QMenuBar>
-#include <QFileDialog>
-#include <QCloseEvent>
-#include <QGuiApplication>
-#include "raise.h"
-#include "CodeEditor.h"
 #include "libpaths.h"
+#include "raise.h"
+#include <QCloseEvent>
+#include <QFileDialog>
+#include <QGuiApplication>
+#include <QMenuBar>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -61,6 +62,7 @@ void MainWindow::createMenus() {
 
     recentMenu = fileMenu->addMenu(tr("&Recent files"));
     auto mru = editorFactory->getMRU();
+    connect(mru, &MRU::setItems, this, &MainWindow::setRecentFiles);
     connect(mru, &MRU::itemAdded, this, &MainWindow::addRecentFile);
     connect(mru, &MRU::itemRemoved, this, &MainWindow::removeRecentFile);
 
@@ -117,9 +119,9 @@ void MainWindow::createMenus() {
     downloadUpdateAct = new QAction(tr("download &Update"), this);
     toolsMenu->addAction(downloadUpdateAct);
     connect(downloadUpdateAct, &QAction::triggered, this, &MainWindow::downloadUpdate);
-
-    mru->add("../MRU.h");
-    mru->add("../MRU.cpp");
+    Config config("EdiQ");
+    config.loadMRUPaths();
+    mru->setItems(config.mruPaths());
 }
 
 void MainWindow::newFile() {
@@ -277,8 +279,19 @@ void MainWindow::downloadUpdate() {
     downloader.start();
 }
 
+void MainWindow::setRecentFiles(const QStringList &fileNames) {
+  recentMenu->clear();
+  for (auto &fileName :fileNames) {
+    auto *action = new QAction(fileName, this);
+    recentMenu->addAction(action);
+    connect(action, &QAction::triggered, this, [this, fileName]() {
+      openOrActivate(fileName);
+    });
+  }
+}
+
 void MainWindow::addRecentFile(const QString &fileName) {
-  QAction *action = new QAction(fileName, this);
+  auto *action = new QAction(fileName, this);
   if (recentMenu->isEmpty())
     recentMenu->addAction(action);
   else
