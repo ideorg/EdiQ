@@ -16,10 +16,9 @@ public:
   void setList(const QStringList &source);
   void add(const QString &item);
   QString takeItem(const QString &item);
-  [[nodiscard]] QList<QString> items() const;
+  [[nodiscard]] QStringList items() const;
 
 signals:
-  void setItems(const QStringList &items);
   void itemAdded(const QString &item);
   void itemRemoved(const QString &item);
 };

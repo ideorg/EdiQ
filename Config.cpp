@@ -24,15 +24,37 @@ bool Config::loadMRUPaths() {
   QJsonObject mruObj = jsonObj["mru"].toObject();
   QJsonArray pathsArray = mruObj["paths"].toArray();
 
-  m_mruPaths.clear();
+  QStringList m_mruPaths;
   for (const QJsonValue& value : pathsArray) {
     if (value.isString()) {
       m_mruPaths.append(value.toString());
     }
   }
+  mru->setList(m_mruPaths);
   return true;
 }
 
-[[nodiscard]] QStringList Config::mruPaths() const {
-  return m_mruPaths;
+bool Config::saveMRUPaths() {
+  QFile configFile(m_configFilePath);
+  if (!configFile.open(QIODevice::WriteOnly)) {
+    qWarning() << "Could not open config file for writing:" << m_configFilePath;
+    return false;
+  }
+
+  QJsonObject jsonObj;
+  QJsonObject mruObj;
+  QJsonArray pathsArray;
+  auto m_mruPaths = mru->items();
+  for (const QString& path : m_mruPaths) {
+    pathsArray.append(path);
+  }
+
+  mruObj["paths"] = pathsArray;
+  jsonObj["mru"] = mruObj;
+
+  QJsonDocument jsonDoc(jsonObj);
+  configFile.write(jsonDoc.toJson());
+  configFile.close();
+
+  return true;
 }

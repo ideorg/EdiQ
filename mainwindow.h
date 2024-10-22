@@ -10,9 +10,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include "IEditorFactory.h"
 #include "downloader.h"
+#include <QMainWindow>
 
 class MainWindow : public QMainWindow
 {

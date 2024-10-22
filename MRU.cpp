@@ -2,7 +2,6 @@
 
 void MRU::setList(const QStringList &source) {
   m_items = source;
-  emit setItems(m_items);
 }
 
 void MRU::add(const QString &item) {
@@ -25,6 +24,6 @@ QString MRU::takeItem(const QString &item) {
   return "";
 }
 
-[[nodiscard]] QList<QString> MRU::items() const {
+[[nodiscard]] QStringList MRU::items() const {
   return m_items;
 }

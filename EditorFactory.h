@@ -10,20 +10,24 @@
 #ifndef EDIQ_EDITORFACTORY_H
 #define EDIQ_EDITORFACTORY_H
 
-#include <QTabWidget>
-#include <repository.h>
+#include "Config.h"
 #include "IEditorFactory.h"
 #include "UntitledCounter.h"
+#include <QTabWidget>
+#include <repository.h>
 
 class EditorFactory : public QObject, public IEditorFactory {
   QTabWidget *tabWidget;
   UntitledCounter untitledCounter;
-  MRU *mru;
   KSyntaxHighlighting::Repository *repository = nullptr;
   QString themeName = "";
+  Config *config;
 public:
   explicit EditorFactory(QTabWidget *tabWidget);
-  ~EditorFactory() { delete repository; }
+  ~EditorFactory() {
+    delete config;
+    delete repository;
+  }
   IEditor *createEditorTab(const QString &path) override;
   int getEditorCount() override;
   IEditor *getEditor(int index) override;

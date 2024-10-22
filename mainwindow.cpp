@@ -9,7 +9,6 @@
 
 #include "mainwindow.h"
 #include "CodeEditor.h"
-#include "Config.h"
 #include "EditorFactory.h"
 #include "SearchBar.h"
 #include "libpaths.h"
@@ -62,7 +61,9 @@ void MainWindow::createMenus() {
 
     recentMenu = fileMenu->addMenu(tr("&Recent files"));
     auto mru = editorFactory->getMRU();
-    connect(mru, &MRU::setItems, this, &MainWindow::setRecentFiles);
+    auto items = mru->items();
+    for (auto i = items.length()-1; i>=0; i--)
+      addRecentFile(items[i]);
     connect(mru, &MRU::itemAdded, this, &MainWindow::addRecentFile);
     connect(mru, &MRU::itemRemoved, this, &MainWindow::removeRecentFile);
 
@@ -119,9 +120,6 @@ void MainWindow::createMenus() {
     downloadUpdateAct = new QAction(tr("download &Update"), this);
     toolsMenu->addAction(downloadUpdateAct);
     connect(downloadUpdateAct, &QAction::triggered, this, &MainWindow::downloadUpdate);
-    Config config("EdiQ");
-    config.loadMRUPaths();
-    mru->setItems(config.mruPaths());
 }
 
 void MainWindow::newFile() {
@@ -146,7 +144,6 @@ void MainWindow::openOrActivate(QString path) {
         editor = (CodeEditor *) editorFactory->createEditorTab(path);
         editor->openFile();
         editorFactory->onTextChanged();
-        editorFactory->getMRU()->takeItem(path);
     }
     tabWidget.setCurrentWidget(editor);
     editor->setPlainFocus();
@@ -187,9 +184,9 @@ void MainWindow::closeAllFile() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    if (editorFactory->tryCloseAll())
-        event->accept();
-    else
+    if (editorFactory->tryCloseAll()) {
+      event->accept();
+    } else
         event->ignore();
 }
 

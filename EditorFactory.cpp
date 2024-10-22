@@ -40,7 +40,7 @@ void EditorFactory::closeEditor(int index) {
     auto* editor = dynamic_cast<CodeEditor *>(tabWidget->widget(index));
     tabWidget->removeTab(index);
     untitledCounter.releaseId(editor->untitledId);
-    mru->add(editor->path);
+    config->mru->add(editor->path);
     delete editor;
 }
 
@@ -113,9 +113,9 @@ void EditorFactory::onChangeThemeName(QString newName) {
 
 EditorFactory::EditorFactory(QTabWidget *tabWidget):tabWidget(tabWidget) {
     repository = new KSyntaxHighlighting::Repository();
-    mru = new MRU(10, this);
+    config = new Config("EdiQ");
 }
 
 MRU *EditorFactory::getMRU() {
-  return mru;
+  return config->mru;
 }
