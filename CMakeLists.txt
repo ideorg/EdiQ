@@ -46,8 +46,8 @@ set(PROJECT_SOURCES
         raise.cpp raise.h XRaise.cpp XRaise.h
         een.cpp een.h
         PlainTextEdit.cpp
-        MRU.cpp
-        MRU.h)
+        MRU.cpp MRU.h
+        Config.cpp Config.h)
 
 qt_add_executable(${PROJECT_NAME}
     MANUAL_FINALIZATION
