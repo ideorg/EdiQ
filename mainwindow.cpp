@@ -279,7 +279,10 @@ void MainWindow::downloadUpdate() {
 
 void MainWindow::addRecentFile(const QString &fileName) {
   QAction *action = new QAction(fileName, this);
-  recentMenu->addAction(action);
+  if (recentMenu->isEmpty())
+    recentMenu->addAction(action);
+  else
+    recentMenu->insertAction(recentMenu->actions()[0], action);
   connect(action, &QAction::triggered, this, [this, fileName]() {
     openOrActivate(fileName);
   });
