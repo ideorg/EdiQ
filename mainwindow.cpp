@@ -211,8 +211,8 @@ void MainWindow::findPreviousSearch() {
 void MainWindow::receivedMessage(int instanceId, QByteArray message) {
     QString argLine = QString(message);
     QStringList args = argLine.split(' ');
-    for (int i=1; i<args.size(); i++)
-        openOrActivate(args[i]);
+    args.removeFirst();
+    openOrActivate(args.join(' '));
     raiseThis();
 }
 
