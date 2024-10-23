@@ -5,23 +5,21 @@ void MRU::setList(const QStringList &source) {
 }
 
 void MRU::add(const QString &item) {
-  while (m_items.removeOne(item))
-    emit itemRemoved(item);
+  m_items.removeAll(item);
   m_items.prepend(item);
-  emit itemAdded(item);
   if (m_items.size() > m_maxSize) {
     QString removedItem = m_items.takeLast();
-    emit itemRemoved(removedItem);
   }
+  emit setItems(m_items);
 }
 
 QString MRU::takeItem(const QString &item) {
   auto index = m_items.indexOf(item);
   if (index != -1) {
     QString removedItem = m_items.takeAt(index);
-    emit itemRemoved(removedItem);
     return removedItem;
   }
+  emit setItems(m_items);
   return "";
 }
 

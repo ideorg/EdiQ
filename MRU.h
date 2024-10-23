@@ -19,8 +19,7 @@ public:
   [[nodiscard]] QStringList items() const;
 
 signals:
-  void itemAdded(const QString &item);
-  void itemRemoved(const QString &item);
+  void setItems(const QStringList &items);
 };
 
 #endif//MRU_H

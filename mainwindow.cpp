@@ -62,10 +62,9 @@ void MainWindow::createMenus() {
     recentMenu = fileMenu->addMenu(tr("&Recent files"));
     auto mru = editorFactory->getMRU();
     auto items = mru->items();
-    for (auto i = items.length()-1; i>=0; i--)
-      addRecentFile(items[i]);
-    connect(mru, &MRU::itemAdded, this, &MainWindow::addRecentFile);
-    connect(mru, &MRU::itemRemoved, this, &MainWindow::removeRecentFile);
+    setRecentFiles(items);
+    connect(mru, &MRU::setItems, this, &MainWindow::setRecentFiles);
+    connect(mru, &MRU::setItems, this, &MainWindow::setRecentFiles);
 
     QAction *saveAct = new QAction(tr("&Save"), this);
     saveAct->setShortcut(QKeySequence("ctrl+s"));
@@ -285,27 +284,5 @@ void MainWindow::setRecentFiles(const QStringList &fileNames) {
     connect(action, &QAction::triggered, this, [this, fileName]() {
       openOrActivate(fileName);
     });
-  }
-}
-
-void MainWindow::addRecentFile(const QString &fileName) {
-  auto *action = new QAction(fileName, this);
-  if (recentMenu->isEmpty())
-    recentMenu->addAction(action);
-  else
-    recentMenu->insertAction(recentMenu->actions()[0], action);
-  connect(action, &QAction::triggered, this, [this, fileName]() {
-    openOrActivate(fileName);
-  });
-}
-
-void MainWindow::removeRecentFile(const QString &fileName) {
-  QList<QAction *> actions = recentMenu->actions();
-  for (QAction *action : actions) {
-    if (action->text() == fileName) {
-      recentMenu->removeAction(action);
-      delete action;
-      break;
-    }
   }
 }

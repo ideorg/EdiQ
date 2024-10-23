@@ -33,8 +33,6 @@ private:
     void newFile();
     void openFile();
     void setRecentFiles(const QStringList &fileNames);
-    void addRecentFile(const QString &fileName);
-    void removeRecentFile(const QString &fileName);
     void saveFile();
     void saveAsFile();
     void closeFile();
