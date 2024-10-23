@@ -39,8 +39,10 @@ IEditor *EditorFactory::getCurrentEditor() {
 void EditorFactory::closeEditor(int index) {
     auto* editor = dynamic_cast<CodeEditor *>(tabWidget->widget(index));
     tabWidget->removeTab(index);
-    untitledCounter.releaseId(editor->untitledId);
-    config->mru->add(editor->path);
+    if (editor->path.isEmpty())
+      untitledCounter.releaseId(editor->untitledId);
+    else
+      config->mru->add(editor->path);
     delete editor;
 }
 
