@@ -144,6 +144,7 @@ void MainWindow::openOrActivate(QString path) {
         editor = (CodeEditor *) editorFactory->createEditorTab(path);
         editor->openFile();
         editorFactory->onTextChanged();
+        editorFactory->getMRU()->takeItem(path);
     }
     tabWidget.setCurrentWidget(editor);
     editor->setPlainFocus();

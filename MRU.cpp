@@ -19,7 +19,7 @@ QString MRU::takeItem(const QString &item) {
   auto index = m_items.indexOf(item);
   if (index != -1) {
     QString removedItem = m_items.takeAt(index);
-    emit itemRemoved(removedItem);  // Emituj sygnał usunięcia
+    emit itemRemoved(removedItem);
     return removedItem;
   }
   return "";
