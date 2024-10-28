@@ -19,7 +19,7 @@ class Config {
 public:
   Config(QString  appName)
       : m_appName(std::move(appName)), m_configFilePath(getConfigFilePath()) {
-    mru = new MRU(10);
+    mru = new MRU(25);
     loadMRUPaths();
   }
   ~Config() {
