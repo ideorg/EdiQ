@@ -113,7 +113,7 @@ void EditorFactory::onChangeThemeName(QString newName) {
     }
 }
 
-EditorFactory::EditorFactory(QTabWidget *tabWidget):tabWidget(tabWidget) {
+EditorFactory::EditorFactory(MruTabWidget *tabWidget):tabWidget(tabWidget) {
     repository = new KSyntaxHighlighting::Repository();
     config = new Config("EdiQ");
 }

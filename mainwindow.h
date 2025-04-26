@@ -12,6 +12,8 @@
 
 #include "IEditorFactory.h"
 #include "downloader.h"
+#include "mrutabwidget.h"
+
 #include <QMainWindow>
 
 class MainWindow : public QMainWindow
@@ -29,7 +31,7 @@ private:
     void tabSelected(int n);
     IEditorFactory *editorFactory;
     void createMenus();
-    QTabWidget tabWidget;
+    MruTabWidget tabWidget;
     void newFile();
     void openFile();
     void setRecentFiles(const QStringList &fileNames);

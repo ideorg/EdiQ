@@ -13,17 +13,18 @@
 #include "Config.h"
 #include "IEditorFactory.h"
 #include "UntitledCounter.h"
-#include <QTabWidget>
 #include <repository.h>
+#include "mrutabwidget.h"
+
 
 class EditorFactory : public QObject, public IEditorFactory {
-  QTabWidget *tabWidget;
+  MruTabWidget *tabWidget;
   UntitledCounter untitledCounter;
   KSyntaxHighlighting::Repository *repository = nullptr;
   QString themeName = "";
   Config *config;
 public:
-  explicit EditorFactory(QTabWidget *tabWidget);
+  explicit EditorFactory(MruTabWidget *tabWidget);
   ~EditorFactory() {
     delete config;
     delete repository;
